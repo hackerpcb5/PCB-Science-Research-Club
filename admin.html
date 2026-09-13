@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Panel de administración - PCB Science Research Club">
+    <title>Admin - PCB Science Research Club</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header admin-header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <img src="Logo.png" alt="Logo" class="logo-img">
+                    <span class="logo-text">Panel de Administración</span>
+                </div>
+                <nav class="nav">
+                    <ul class="nav-list">
+                        <li><a href="index.html" class="nav-link">Ver Sitio</a></li>
+                        <li><a href="#" class="nav-link" id="logoutBtn">Cerrar Sesión</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="main admin-main">
+        <div class="admin-container">
+            <aside class="admin-sidebar">
+                <nav class="admin-nav">
+                    <button class="admin-nav-item active" data-section="articles">Artículos</button>
+                    <button class="admin-nav-item" data-section="categories">Categorías</button>
+                    <button class="admin-nav-item" data-section="gallery">Galería</button>
+                    <button class="admin-nav-item" data-section="leadership">Directiva</button>
+                    <button class="admin-nav-item" data-section="settings">Configuración</button>
+                </nav>
+            </aside>
+
+            <div class="admin-content">
+                <section class="admin-section" id="section-articles">
+                    <h2 class="section-title">Gestión de Artículos</h2>
+                    <button class="btn btn-primary" id="addArticleBtn">+ Nuevo Artículo</button>
+                    <div class="table-container">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Título</th>
+                                    <th>Autor</th>
+                                    <th>Categoría</th>
+                                    <th>Fecha</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="articlesTableBody">
+                                <tr><td colspan="5" class="loading-text">Cargando artículos...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section class="admin-section hidden" id="section-categories">
+                    <h2 class="section-title">Gestión de Categorías</h2>
+                    <button class="btn btn-primary" id="addCategoryBtn">+ Nueva Categoría</button>
+                    <div class="table-container">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="categoriesTableBody">
+                                <tr><td colspan="2" class="loading-text">Cargando categorías...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section class="admin-section hidden" id="section-gallery">
+                    <h2 class="section-title">Gestión de Galería</h2>
+                    <button class="btn btn-primary" id="addGalleryBtn">+ Nueva Imagen</button>
+                    <div class="gallery-grid" id="adminGalleryGrid">
+                        <p class="loading-text">Cargando galería...</p>
+                    </div>
+                </section>
+
+                <section class="admin-section hidden" id="section-leadership">
+                    <h2 class="section-title">Gestión de Directiva</h2>
+                    <button class="btn btn-primary" id="addLeadershipBtn">+ Nuevo Miembro</button>
+                    <div class="table-container">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Foto</th>
+                                    <th>Nombre</th>
+                                    <th>Cargo</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="leadershipTableBody">
+                                <tr><td colspan="4" class="loading-text">Cargando directiva...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section class="admin-section hidden" id="section-settings">
+                    <h2 class="section-title">Configuración del Club</h2>
+                    <form id="settingsForm" class="admin-form">
+                        <div class="form-group">
+                            <label for="settingHistory">Historia</label>
+                            <textarea id="settingHistory" rows="6"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="settingMission">Misión</label>
+                            <textarea id="settingMission" rows="6"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="settingVision">Visión</label>
+                            <textarea id="settingVision" rows="6"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="settingLogoMeaning">Significado del Logo</label>
+                            <textarea id="settingLogoMeaning" rows="6"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                    </form>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal" id="loginModal">
+        <div class="modal-content modal-small">
+            <button class="modal-close" id="loginModalClose">&times;</button>
+            <div class="modal-header">
+                <h2>Iniciar Sesión</h2>
+            </div>
+            <form id="loginForm" class="modal-form">
+                <div class="form-group">
+                    <label for="loginEmail">Correo Electrónico</label>
+                    <input type="email" id="loginEmail" required placeholder="admin@pcbclub.com">
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Contraseña</label>
+                    <input type="password" id="loginPassword" required placeholder="••••••••">
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Iniciar Sesión</button>
+                <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>

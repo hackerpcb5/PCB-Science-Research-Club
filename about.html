@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Conoce el PCB Science Research Club - Historia, misión, visión y directiva">
+    <meta name="keywords" content="PCB Science Research Club, sobre nosotros, misión, visión, directiva">
+    <title>Sobre el Club - PCB Science Research Club</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <img src="Logo.png" alt="PCB Science Research Club Logo" class="logo-img">
+                    <span class="logo-text">PCB Science Research Club</span>
+                </div>
+                <nav class="nav" id="mainNav">
+                    <ul class="nav-list">
+                        <li><a href="index.html" class="nav-link">Inicio</a></li>
+                        <li><a href="about.html" class="nav-link active">Sobre el Club</a></li>
+                        <li><a href="admin.html" class="nav-link">Admin</a></li>
+                    </ul>
+                </nav>
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Abrir menú">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <section class="hero">
+            <div class="container">
+                <img src="Logo.png" alt="Logo del Club" class="hero-logo">
+                <h1 class="hero-title">PCB Science Research Club</h1>
+                <p class="hero-subtitle">"La ciencia es el lenguaje de la verdad, y la investigación su vehículo"</p>
+            </div>
+        </section>
+
+        <section class="about-section">
+            <div class="container">
+                <div class="about-card">
+                    <h2 class="section-title">Sobre el Club</h2>
+                    <div id="clubHistory">
+                        <p class="loading-text">Cargando información...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mission-vision">
+            <div class="container">
+                <div class="mv-grid">
+                    <div class="mv-card mission">
+                        <h2 class="section-title">Misión</h2>
+                        <div id="clubMission">
+                            <p class="loading-text">Cargando...</p>
+                        </div>
+                    </div>
+                    <div class="mv-card vision">
+                        <h2 class="section-title">Visión</h2>
+                        <div id="clubVision">
+                            <p class="loading-text">Cargando...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="logo-meaning">
+            <div class="container">
+                <div class="about-card">
+                    <h2 class="section-title">Significado del Logo</h2>
+                    <div id="logoMeaning">
+                        <p class="loading-text">Cargando...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="gallery-section">
+            <div class="container">
+                <h2 class="section-title">Galería del Programa</h2>
+                <div class="slideshow" id="slideshow">
+                    <div class="slideshow-container" id="slideshowContainer">
+                        <div class="slide active" id="slide0">
+                            <img src="https://via.placeholder.com/1200x500/1a1a2e/ffffff?text=Cargando+Galer%C3%ADa" alt="Galería" class="slide-img">
+                            <div class="slide-caption">
+                                <h3 id="slideTitle"></h3>
+                                <p id="slideDescription"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="slideshow-btn prev" id="prevBtn" aria-label="Anterior">&lt;</button>
+                    <button class="slideshow-btn next" id="nextBtn" aria-label="Siguiente">&gt;</button>
+                    <div class="slideshow-dots" id="slideshowDots"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="leadership-section">
+            <div class="container">
+                <h2 class="section-title">Directiva del Club</h2>
+                <div class="leadership-grid" id="leadershipGrid">
+                    <p class="loading-text">Cargando directiva...</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <img src="Logo.png" alt="Logo" class="footer-logo">
+                    <h3>PCB Science Research Club</h3>
+                    <p>Fomentando la investigación científica y el periodismo científico estudiantil.</p>
+                </div>
+                <div class="footer-social">
+                    <h4>Síguenos</h4>
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook" class="social-link">FB</a>
+                        <a href="#" aria-label="Instagram" class="social-link">IG</a>
+                        <a href="#" aria-label="Twitter" class="social-link">X</a>
+                        <a href="#" aria-label="LinkedIn" class="social-link">LI</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 PCB Science Research Club. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+    <script src="about.js"></script>
+</body>
+</html>

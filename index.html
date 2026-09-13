@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PCB Science Research Club - Artículos científicos, investigación y periodismo científico estudiantil">
+    <meta name="keywords" content="ciencia, investigación, periodismo científico, PCB, club estudiantil">
+    <title>PCB Science Research Club - Artículos Científicos</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <img src="Logo.png" alt="PCB Science Research Club Logo" class="logo-img">
+                    <span class="logo-text">PCB Science Research Club</span>
+                </div>
+                <nav class="nav" id="mainNav">
+                    <ul class="nav-list">
+                        <li><a href="index.html" class="nav-link active">Inicio</a></li>
+                        <li><a href="about.html" class="nav-link">Sobre el Club</a></li>
+                        <li><a href="admin.html" class="nav-link">Admin</a></li>
+                    </ul>
+                </nav>
+                <div class="header-actions">
+                    <select id="categoryFilter" class="category-filter" aria-label="Filtrar por categoría">
+                        <option value="">Todas las categorías</option>
+                    </select>
+                    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Abrir menú">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <section class="hero">
+            <div class="container">
+                <h1 class="hero-title">Descubre la Ciencia</h1>
+                <p class="hero-subtitle">Artículos de investigación y periodismo científico por estudiantes, para el mundo</p>
+            </div>
+        </section>
+
+        <section class="articles-section">
+            <div class="container">
+                <div class="articles-header">
+                    <h2 class="section-title">Artículos Publicados</h2>
+                    <p class="articles-count" id="articlesCount">Cargando artículos...</p>
+                </div>
+                <div class="articles-grid" id="articlesGrid">
+                    <div class="loading-spinner">
+                        <div class="spinner"></div>
+                        <p>Cargando artículos...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <img src="Logo.png" alt="Logo" class="footer-logo">
+                    <h3>PCB Science Research Club</h3>
+                    <p>Fomentando la investigación científica y el periodismo científico estudiantil.</p>
+                </div>
+                <div class="footer-social">
+                    <h4>Síguenos</h4>
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook" class="social-link">FB</a>
+                        <a href="#" aria-label="Instagram" class="social-link">IG</a>
+                        <a href="#" aria-label="Twitter" class="social-link">X</a>
+                        <a href="#" aria-label="LinkedIn" class="social-link">LI</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 PCB Science Research Club. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <div class="modal" id="articleModal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose" aria-label="Cerrar">&times;</button>
+            <div class="modal-body" id="modalBody">
+                <div class="article-detail">
+                    <img id="modalCover" src="" alt="Portada del artículo" class="article-detail-cover">
+                    <div class="article-detail-content">
+                        <span class="article-category" id="modalCategory"></span>
+                        <h1 id="modalTitle"></h1>
+                        <div class="article-meta">
+                            <span id="modalAuthor"></span>
+                            <span id="modalDate"></span>
+                        </div>
+                        <p id="modalSummary"></p>
+                        <div class="article-actions">
+                            <a id="modalPdfBtn" href="#" target="_blank" class="btn btn-primary">Ver PDF</a>
+                            <a id="modalDownloadBtn" href="#" download class="btn btn-secondary">Descargar PDF</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>

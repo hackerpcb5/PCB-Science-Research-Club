@@ -1,0 +1,278 @@
+creame un prompt para una ia de codigo para que cree una web para el pcbcience research club. este es un club dedicado a la investigacion cientifica y periodismo cientifico. para esto necesito que en el header se presente el logo de la organizacion(va estar el la carpeta), filtrar los articulos por categoria y un boton a otra web informativa sobre el club. esta web informativa va a tener informacion del club, mission, vision, significados de componentes y colores del logo , un slice show de fotos del programa y una seccion donde se presenta la directiva del club. En el body de la web principal se van a presentar los articulos cientificos en diferentes recuadros (como en national geographic), presentandose los articulos en orden cronologico. Tambien, crea una web aparte donde se pueda administrar los articulos para agragar y/o eliminar articulos insertando el archivo pdf, categoria, autor y portada o imagen. Incluye dentro de esta web de administracion, la posibilidad de modificar el slice show de fotos del programa y la seccion donde se presenta la directiva del club que aparecen en la web informativa sobre el programa.
+
+Actúa como un desarrollador Full Stack senior especializado en HTML, CSS, JavaScript y Supabase.
+
+Crea una plataforma web completa para el "PCB Science Research Club", una organización estudiantil dedicada a la investigación científica y el periodismo científico.
+
+IMPORTANTE:
+- Utilizar únicamente HTML, CSS y JavaScript Vanilla.
+- No utilizar Node.js.
+- Utilizar Supabase como backend y base de datos.
+- Generar código limpio, modular, documentado y responsive.
+- Diseñar una interfaz moderna inspirada en National Geographic, Scientific American y revistas científicas modernas.
+- Utilizar una paleta profesional enfocada en ciencia, educación e investigación.
+- Todo el contenido dinámico deberá cargarse desde Supabase.
+
+====================================
+WEB PRINCIPAL (INDEX)
+====================================
+
+Objetivo:
+Mostrar los artículos científicos publicados por el club.
+
+HEADER:
+- Mostrar el logo oficial del club.
+- El logo estará disponible dentro de la carpeta del proyecto.
+- Mostrar nombre del club:
+  "PCB Science Research Club".
+- Menú de navegación responsive.
+- Selector para filtrar artículos por categoría.
+- Botón "Sobre el Club" que dirija a una segunda página informativa.
+- Diseño elegante tipo revista científica.
+
+BODY:
+- Mostrar los artículos en formato de tarjetas similares a National Geographic.
+- Cada tarjeta debe contener:
+  - Imagen de portada.
+  - Título.
+  - Categoría.
+  - Autor.
+  - Fecha de publicación.
+  - Resumen corto.
+  - Botón "Leer Artículo".
+
+ORDEN:
+- Los artículos deben mostrarse automáticamente en orden cronológico descendente (más recientes primero).
+
+AL ABRIR UN ARTÍCULO:
+- Mostrar la información completa.
+- Permitir visualizar el PDF integrado mediante visor PDF.
+- Opción para descargar PDF.
+
+FOOTER:
+- Información del club.
+- Redes sociales.
+- Derechos reservados.
+
+====================================
+PÁGINA INFORMATIVA DEL CLUB
+(about.html)
+====================================
+
+Crear una página independiente llamada about.html.
+
+SECCIONES:
+
+1. HERO SECTION
+- Logo.
+- Nombre del club.
+- Frase inspiradora sobre ciencia e investigación.
+
+2. SOBRE EL CLUB
+- Historia del club.
+- Descripción general.
+
+3. MISIÓN
+- Mostrar misión institucional.
+
+4. VISIÓN
+- Mostrar visión institucional.
+
+5. SIGNIFICADO DEL LOGO
+- Explicación de cada componente gráfico.
+- Significado de colores.
+- Significado de símbolos presentes.
+
+6. GALERÍA DEL PROGRAMA
+- Slideshow automático.
+- Carrusel responsive.
+- Navegación manual.
+- Las imágenes deben provenir desde Supabase.
+
+7. DIRECTIVA DEL CLUB
+- Mostrar miembros de la directiva.
+- Cada miembro debe incluir:
+  - Foto.
+  - Nombre.
+  - Cargo.
+  - Breve biografía.
+
+8. FOOTER
+
+====================================
+PANEL DE ADMINISTRACIÓN
+(admin.html)
+====================================
+
+Crear una página administrativa completamente separada.
+
+REQUISITO:
+- Acceso protegido mediante autenticación de Supabase.
+
+LOGIN:
+- Correo electrónico.
+- Contraseña.
+- Recuperación de contraseña.
+
+DASHBOARD PRINCIPAL
+
+SECCIÓN 1: GESTIÓN DE ARTÍCULOS
+
+Permitir:
+
+Crear artículo:
+- Título.
+- Autor.
+- Categoría.
+- Fecha.
+- Resumen.
+- PDF.
+- Imagen de portada.
+
+Editar artículo:
+- Modificar cualquier campo.
+
+Eliminar artículo:
+- Confirmación antes de borrar.
+
+Visualizar listado de artículos.
+
+SECCIÓN 2: GESTIÓN DE CATEGORÍAS
+
+Permitir:
+- Crear categoría.
+- Editar categoría.
+- Eliminar categoría.
+
+Ejemplos:
+- Biología
+- Química
+- Física
+- Medicina
+- Tecnología
+- Medio Ambiente
+- Astronomía
+- Investigación Estudiantil
+
+SECCIÓN 3: GESTIÓN DEL SLIDESHOW
+
+Permitir:
+- Agregar fotografías.
+- Eliminar fotografías.
+- Cambiar orden.
+- Editar título y descripción.
+
+Todas las imágenes deben almacenarse en Supabase Storage.
+
+SECCIÓN 4: GESTIÓN DE LA DIRECTIVA
+
+Permitir:
+- Agregar miembro.
+- Editar miembro.
+- Eliminar miembro.
+
+Campos:
+- Nombre.
+- Cargo.
+- Fotografía.
+- Biografía.
+
+SECCIÓN 5: CONFIGURACIÓN DEL CLUB
+
+Permitir editar:
+- Historia.
+- Misión.
+- Visión.
+- Significado del logo.
+- Información institucional.
+
+====================================
+SUPABASE
+====================================
+
+Diseñar la base de datos completa.
+
+TABLAS:
+
+articles
+- id
+- title
+- author
+- category_id
+- summary
+- pdf_url
+- cover_image
+- created_at
+
+categories
+- id
+- name
+
+leadership_members
+- id
+- name
+- position
+- biography
+- photo_url
+- order_index
+
+gallery_images
+- id
+- title
+- description
+- image_url
+- order_index
+
+club_information
+- id
+- history
+- mission
+- vision
+- logo_meaning
+
+Configurar relaciones correctamente.
+
+====================================
+SUPABASE STORAGE
+====================================
+
+Crear buckets:
+
+articles-pdfs
+article-covers
+gallery
+leadership
+
+Configurar políticas de acceso adecuadas.
+
+====================================
+DISEÑO
+====================================
+
+- Responsive para móvil, tablet y desktop.
+- Animaciones suaves.
+- Lazy loading de imágenes.
+- SEO básico.
+- Accesibilidad WCAG.
+- Diseño elegante tipo revista científica.
+- Tarjetas con efecto hover.
+- Transiciones modernas.
+
+====================================
+ENTREGABLES
+====================================
+
+Generar:
+
+1. Estructura completa de carpetas.
+2. HTML completo.
+3. CSS completo.
+4. JavaScript completo.
+5. Script SQL para Supabase.
+6. Configuración de Storage.
+7. Políticas RLS.
+8. Instrucciones de despliegue.
+9. Archivo README.md detallado.
+10. Código completamente funcional listo para producción.
+
+El resultado debe ser profesional, escalable, seguro y apto para un club científico universitario.
