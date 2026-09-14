@@ -13,38 +13,34 @@
     document.addEventListener('DOMContentLoaded', init);
 
     async function init() {
-        await checkAuth();
+        const authenticated = await checkAuth();
+        if (!authenticated) return;
         setupEventListeners();
     }
 
     async function checkAuth() {
-        const { data: { session } } = await supabase.auth.getSession();
-
-        if (session) {
-            currentUser = session.user;
-            document.getElementById('loginModal').classList.remove('active');
-        } else {
-            showLoginModal();
+        if (!supabase || !supabase.auth) {
+            window.location.href = 'login.html';
+            return false;
         }
-    }
+        try {
+            const { data: { session } } = await supabase.auth.getSession();
 
-    function showLoginModal() {
-        document.getElementById('loginModal').classList.add('active');
+            if (session) {
+                currentUser = session.user;
+                return true;
+            }
+        } catch (error) {
+            console.error('Error verificando sesión:', error);
+        }
+
+        window.location.href = 'login.html';
+        return false;
     }
 
     function setupEventListeners() {
-        // Login form
-        document.getElementById('loginForm').addEventListener('submit', handleLogin);
-
         // Logout
         document.getElementById('logoutBtn').addEventListener('click', handleLogout);
-
-        // Login modal close
-        document.getElementById('loginModalClose').addEventListener('click', () => {
-            document.getElementById('loginModal').classList.remove('active');
-        });
-
-        // Admin navigation
         document.querySelectorAll('.admin-nav-item').forEach(item => {
             item.addEventListener('click', () => {
                 const section = item.dataset.section;
@@ -72,32 +68,17 @@
         document.getElementById('settingsForm')?.addEventListener('submit', handleSettingsSave);
     }
 
-    async function handleLogin(e) {
-        e.preventDefault();
-        const email = document.getElementById('loginEmail').value;
-        const password = document.getElementById('loginPassword').value;
-
-        try {
-            const { data, error } = await supabase.auth.signInWithPassword({
-                email: email,
-                password: password,
-            });
-
-            if (error) throw error;
-
-            currentUser = data.user;
-            document.getElementById('loginModal').classList.remove('active');
-            await loadAllData();
-        } catch (error) {
-            alert('Error al iniciar sesión: ' + error.message);
-        }
-    }
-
     async function handleLogout(e) {
         e.preventDefault();
-        await supabase.auth.signOut();
+        if (supabase && supabase.auth) {
+            try {
+                await supabase.auth.signOut();
+            } catch (error) {
+                console.error('Error al cerrar sesión:', error);
+            }
+        }
         currentUser = null;
-        location.reload();
+        window.location.href = 'login.html';
     }
 
     async function loadAllData() {

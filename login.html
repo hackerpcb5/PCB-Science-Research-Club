@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Acceso administrativo - PCB Science Research Club">
+    <title>Acceso Admin - PCB Science Research Club</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-brand">
+                <img src="Logo.png" alt="PCB Science Research Club" class="login-logo">
+                <h1 class="login-title">Panel de Administración</h1>
+                <p class="login-subtitle">Accede para gestionar el contenido del club</p>
+            </div>
+
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="loginEmail">Correo Electrónico</label>
+                    <input type="email" id="loginEmail" required placeholder="admin@pcbclub.com" autocomplete="email">
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Contraseña</label>
+                    <div class="password-field">
+                        <input type="password" id="loginPassword" required placeholder="••••••••" autocomplete="current-password">
+                        <button type="button" class="password-toggle" id="passwordToggle" aria-label="Mostrar contraseña">
+                            <span id="passwordToggleIcon">👁</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div style="display:flex;justify-content:space-between;align-items:center;">
+                        <button type="submit" class="btn btn-primary btn-block" id="loginSubmitBtn">
+                            <span id="loginBtnText">Iniciar Sesión</span>
+                            <span class="spinner-inline" id="loginSpinner" style="display:none;"></span>
+                        </button>
+                        <a href="#" class="forgot-password" id="forgotPasswordLink">¿Olvidaste tu contraseña?</a>
+                    </div>
+                </div>
+            </form>
+
+            <div class="login-footer">
+                <p class="login-footer-text">PCB Science Research Club &copy; 2024</p>
+                <a href="index.html" class="login-back-link">← Volver al sitio</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="forgotPasswordModal">
+        <div class="modal-content modal-small">
+            <button class="modal-close" id="forgotPasswordClose">&times;</button>
+            <div class="modal-header">
+                <h2>Recuperar Contraseña</h2>
+            </div>
+            <form id="forgotPasswordForm" class="modal-form">
+                <div class="form-group">
+                    <label for="resetEmail">Correo Electrónico</label>
+                    <input type="email" id="resetEmail" required placeholder="admin@pcbclub.com" autocomplete="email">
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Enviar Enlace de Recuperación</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="supabase.min.js"></script>
+    <script src="config.js"></script>
+    <script src="login.js"></script>
+</body>
+</html>
