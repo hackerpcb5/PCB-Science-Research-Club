@@ -12,21 +12,20 @@ Plataforma web completa para el PCB Science Research Club, una organización est
 ## Estructura del Proyecto
 
 ```
-PCB science Research Club/
+PCB-Science-Research-Club-main/
 ├── index.html              # Página principal con artículos
 ├── about.html              # Página informativa del club
 ├── admin.html              # Panel de administración
-├── css/
-│   └── style.css           # Estilos CSS
-├── js/
-│   ├── config.js           # Configuración de Supabase
-│   ├── main.js             # Lógica de la página principal
-│   ├── about.js            # Lógica de la página about
-│   └── admin.js            # Lógica del panel de administración
-├── assets/
-│   └── images/
-│       └── logo.png        # Logo del club
+├── login.html              # Acceso administrativo
+├── Logo.png                # Logo del club
+├── style.css               # Estilos CSS
+├── config.js               # Configuración de Supabase
+├── main.js                 # Lógica de la página principal
+├── about.js                # Lógica de la página about
+├── admin.js                # Lógica del panel de administración
+├── login.js                # Lógica del login
 ├── supabase-schema.sql     # Script SQL para Supabase
+├── supabase.min.js         # Supabase JS client library
 └── README.md               # Este archivo
 ```
 
@@ -94,7 +93,7 @@ CREATE POLICY "Admin delete leadership" ON storage.objects FOR DELETE USING (buc
 
 ### Paso 5: Configurar Credenciales en el Código
 
-Edita el archivo `js/config.js` y reemplaza los valores:
+Edita el archivo `config.js` y reemplaza los valores:
 
 ```javascript
 const SUPABASE_URL = 'https://tu-proyecto.supabase.co';
@@ -181,7 +180,7 @@ Sube los archivos a cualquier servidor web (Apache, Nginx, etc.)
 
 ### Colores
 
-Edita las variables CSS en `css/style.css`:
+Edita las variables CSS en `style.css`:
 
 ```css
 :root {
@@ -194,7 +193,7 @@ Edita las variables CSS en `css/style.css`:
 
 ### Logo
 
-Reemplaza `assets/images/logo.png` con el logo oficial del club.
+Reemplaza `Logo.png` con el logo oficial del club.
 
 ### Contenido
 

@@ -10,9 +10,9 @@
     }
 
     async function checkExistingSession() {
-        if (!supabase || !supabase.auth) return;
+        if (!window.supabaseClient || !window.supabaseClient.auth) return;
         try {
-            const { data: { session } } = await supabase.auth.getSession();
+            const { data: { session } } = await window.supabaseClient.auth.getSession();
             if (session) {
                 window.location.href = 'admin.html';
             }
@@ -32,7 +32,7 @@
     async function handleLogin(e) {
         e.preventDefault();
 
-        if (!supabase || !supabase.auth) {
+        if (!window.supabaseClient || !window.supabaseClient.auth) {
             alert('Error: el cliente de Supabase no ha cargado. Recarga la página.');
             return;
         }
@@ -49,10 +49,10 @@
 
         try {
             let result;
-            if (typeof supabase.auth.signInWithPassword === 'function') {
-                result = await supabase.auth.signInWithPassword({ email, password });
-            } else if (typeof supabase.auth.signIn === 'function') {
-                result = await supabase.auth.signIn({ email, password });
+            if (typeof window.supabaseClient.auth.signInWithPassword === 'function') {
+                result = await window.supabaseClient.auth.signInWithPassword({ email, password });
+            } else if (typeof window.supabaseClient.auth.signIn === 'function') {
+                result = await window.supabaseClient.auth.signIn({ email, password });
             } else {
                 throw new Error('No se encontró método de autenticación');
             }
@@ -85,7 +85,7 @@
 
     function openForgotPasswordModal(e) {
         e.preventDefault();
-        if (!supabase || !supabase.auth) {
+        if (!window.supabaseClient || !window.supabaseClient.auth) {
             alert('Error: el cliente de Supabase no ha cargado.');
             return;
         }
@@ -101,7 +101,7 @@
         const email = document.getElementById('resetEmail').value;
 
         try {
-            const { error } = await supabase.auth.resetPasswordEmail(email, {
+            const { error } = await window.supabaseClient.auth.resetPasswordEmail(email, {
                 redirectTo: window.location.origin + window.location.pathname,
             });
 

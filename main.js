@@ -19,7 +19,7 @@
 
     async function loadCategories() {
         try {
-            const { data, error } = await supabase
+            const { data, error } = await window.supabaseClient
                 .from('categories')
                 .select('*')
                 .order('name');
@@ -50,7 +50,7 @@
         grid.innerHTML = '<div class="loading-spinner"><div class="spinner"></div><p>Cargando artículos...</p></div>';
 
         try {
-            let query = supabase
+            let query = window.supabaseClient
                 .from('articles')
                 .select('*, categories(name)')
                 .order('created_at', { ascending: false });

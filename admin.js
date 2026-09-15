@@ -19,12 +19,12 @@
     }
 
     async function checkAuth() {
-        if (!supabase || !supabase.auth) {
+        if (!window.supabaseClient || !window.supabaseClient.auth) {
             window.location.href = 'login.html';
             return false;
         }
         try {
-            const { data: { session } } = await supabase.auth.getSession();
+            const { data: { session } } = await window.supabaseClient.auth.getSession();
 
             if (session) {
                 currentUser = session.user;
@@ -41,6 +41,36 @@
     function setupEventListeners() {
         // Logout
         document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+
+        // Nuevo dropdown
+        const nuevoDropdown = document.getElementById('nuevoDropdownBtn');
+        if (nuevoDropdown) {
+            nuevoDropdown.addEventListener('click', (e) => {
+                e.stopPropagation();
+                nuevoDropdown.parentElement.classList.toggle('active');
+            });
+
+            document.querySelectorAll('.nav-dropdown-menu a').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const type = item.dataset.type;
+                    switch (type) {
+                        case 'article': openArticleModal(); break;
+                        case 'category': openCategoryModal(); break;
+                        case 'gallery': openGalleryModal(); break;
+                        case 'leadership': openLeadershipModal(); break;
+                    }
+                    nuevoDropdown.parentElement.classList.remove('active');
+                });
+            });
+
+            document.addEventListener('click', () => {
+                if (nuevoDropdown.parentElement) {
+                    nuevoDropdown.parentElement.classList.remove('active');
+                }
+            });
+        }
+
         document.querySelectorAll('.admin-nav-item').forEach(item => {
             item.addEventListener('click', () => {
                 const section = item.dataset.section;
@@ -66,13 +96,23 @@
 
         // Settings form
         document.getElementById('settingsForm')?.addEventListener('submit', handleSettingsSave);
+
+        document.addEventListener('click', (e) => {
+            if (e.target.matches('.modal-cancel')) {
+                const targetId = e.target.dataset.target;
+                if (targetId) {
+                    const modal = document.getElementById(targetId);
+                    if (modal) modal.remove();
+                }
+            }
+        });
     }
 
     async function handleLogout(e) {
         e.preventDefault();
-        if (supabase && supabase.auth) {
+        if (window.supabaseClient && window.supabaseClient.auth) {
             try {
-                await supabase.auth.signOut();
+                await window.supabaseClient.auth.signOut();
             } catch (error) {
                 console.error('Error al cerrar sesión:', error);
             }
@@ -111,7 +151,7 @@
     // Articles CRUD
     async function loadArticles() {
         try {
-            const { data, error } = await supabase
+            const { data, error } = await window.supabaseClient
                 .from('articles')
                 .select('*, categories(name)')
                 .order('created_at', { ascending: false });
@@ -163,6 +203,28 @@
         }
     }
 
+    function removeModal(id) {
+        const modal = document.getElementById(id);
+        if (modal) modal.remove();
+    }
+
+    function addModalClose(id, modalElement) {
+        const closeBtn = document.getElementById(id);
+        if (!closeBtn) return;
+        closeBtn.addEventListener('click', () => {
+            removeModal(modalElement.id);
+        });
+    }
+
+    function addFormSubmit(id, handler) {
+        const form = document.getElementById(id);
+        if (!form) return;
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            await handler();
+        });
+    }
+
     async function openArticleModal(article = null) {
         const isEdit = !!article;
         const categoriesSelect = await getCategoriesOptions();
@@ -171,60 +233,62 @@
         modal.className = 'modal active';
         modal.id = 'articleFormModal';
         modal.innerHTML = `
-            <div class="modal-content">
+            <div class="modal-content modal-narrow">
                 <button class="modal-close" id="closeArticleModal">&times;</button>
                 <div class="modal-header">
                     <h2>${isEdit ? 'Editar' : 'Nuevo'} Artículo</h2>
                 </div>
-                <form id="articleForm" class="modal-form">
+                <form id="articleForm" class="modal-form" novalidate>
                     <input type="hidden" id="articleId" value="${isEdit ? article.id : ''}">
-                    <div class="form-group">
-                        <label for="articleTitle">Título</label>
-                        <input type="text" id="articleTitle" required value="${isEdit ? article.title : ''}">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="articleTitle">Título <span class="required">*</span></label>
+                            <input type="text" id="articleTitle" required value="${isEdit ? article.title : ''}">
+                        </div>
+                        <div class="form-group">
+                            <label for="articleAuthor">Autor <span class="required">*</span></label>
+                            <input type="text" id="articleAuthor" required value="${isEdit ? article.author : ''}">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="articleCategory">Categoría <span class="required">*</span></label>
+                            <select id="articleCategory" required>
+                                <option value="">Seleccionar categoría</option>
+                                ${categoriesSelect}
+                            </select>
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label for="articleAuthor">Autor</label>
-                        <input type="text" id="articleAuthor" required value="${isEdit ? article.author : ''}">
-                    </div>
-                    <div class="form-group">
-                        <label for="articleCategory">Categoría</label>
-                        <select id="articleCategory" required>
-                            <option value="">Seleccionar categoría</option>
-                            ${categoriesSelect}
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="articleSummary">Resumen</label>
+                        <label for="articleSummary">Resumen <span class="required">*</span></label>
                         <textarea id="articleSummary" required rows="4">${isEdit ? article.summary : ''}</textarea>
                     </div>
-                    <div class="form-group">
-                        <label for="articleCover">Imagen de Portada (URL)</label>
-                        <input type="url" id="articleCover" value="${isEdit ? article.cover_image || '' : ''}" placeholder="https://...">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="articleCover">Imagen de Portada (URL) <span class="optional">(opcional)</span></label>
+                            <input type="url" id="articleCover" value="${isEdit ? article.cover_image || '' : ''}" placeholder="https://...">
+                        </div>
+                        <div class="form-group">
+                            <label for="articlePdf">PDF (URL) <span class="optional">(opcional)</span></label>
+                            <input type="url" id="articlePdf" value="${isEdit ? article.pdf_url || '' : ''}" placeholder="https://...">
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="articlePdf">PDF (URL)</label>
-                        <input type="url" id="articlePdf" value="${isEdit ? article.pdf_url || '' : ''}" placeholder="https://...">
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">${isEdit ? 'Actualizar' : 'Crear'} Artículo</button>
+                        <button type="button" class="btn btn-secondary modal-cancel" data-target="articleFormModal">Cancelar</button>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block">${isEdit ? 'Actualizar' : 'Crear'} Artículo</button>
                 </form>
             </div>
         `;
 
         document.body.appendChild(modal);
-
-        document.getElementById('closeArticleModal')?.addEventListener('click', () => {
-            modal.remove();
-        });
-
-        document.getElementById('articleForm')?.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            await saveArticle();
-        });
+        addModalClose('closeArticleModal', modal);
+        addFormSubmit('articleForm', saveArticle);
     }
 
     async function getCategoriesOptions() {
         try {
-            const { data } = await supabase.from('categories').select('id, name').order('name');
+            const { data } = await window.supabaseClient.from('categories').select('id, name').order('name');
             return (data || []).map(c => `<option value="${c.id}">${c.name}</option>`).join('');
         } catch {
             return '';
@@ -245,10 +309,10 @@
         try {
             let error;
             if (id) {
-                const { error: err } = await supabase.from('articles').update(articleData).eq('id', id);
+                const { error: err } = await window.supabaseClient.from('articles').update(articleData).eq('id', id);
                 error = err;
             } else {
-                const { error: err } = await supabase.from('articles').insert([articleData]);
+                const { error: err } = await window.supabaseClient.from('articles').insert([articleData]);
                 error = err;
             }
 
@@ -263,7 +327,7 @@
 
     async function deleteArticle(id) {
         try {
-            const { error } = await supabase.from('articles').delete().eq('id', id);
+            const { error } = await window.supabaseClient.from('articles').delete().eq('id', id);
             if (error) throw error;
             await loadArticles();
         } catch (error) {
@@ -274,7 +338,7 @@
     // Categories CRUD
     async function loadCategories() {
         try {
-            const { data, error } = await supabase.from('categories').select('*').order('name');
+            const { data, error } = await window.supabaseClient.from('categories').select('*').order('name');
             if (error) throw error;
             categories = data || [];
             renderCategoriesTable();
@@ -329,25 +393,23 @@
                 <div class="modal-header">
                     <h2>${isEdit ? 'Editar' : 'Nueva'} Categoría</h2>
                 </div>
-                <form id="categoryForm" class="modal-form">
+                <form id="categoryForm" class="modal-form" novalidate>
                     <input type="hidden" id="categoryId" value="${isEdit ? category.id : ''}">
                     <div class="form-group">
-                        <label for="categoryName">Nombre</label>
+                        <label for="categoryName">Nombre <span class="required">*</span></label>
                         <input type="text" id="categoryName" required value="${isEdit ? category.name : ''}">
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block">${isEdit ? 'Actualizar' : 'Crear'} Categoría</button>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">${isEdit ? 'Actualizar' : 'Crear'} Categoría</button>
+                        <button type="button" class="btn btn-secondary modal-cancel" data-target="categoryFormModal">Cancelar</button>
+                    </div>
                 </form>
             </div>
         `;
 
         document.body.appendChild(modal);
-
-        document.getElementById('closeCategoryModal')?.addEventListener('click', () => modal.remove());
-
-        document.getElementById('categoryForm')?.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            await saveCategory();
-        });
+        addModalClose('closeCategoryModal', modal);
+        addFormSubmit('categoryForm', saveCategory);
     }
 
     async function saveCategory() {
@@ -357,10 +419,10 @@
         try {
             let error;
             if (id) {
-                const { error: err } = await supabase.from('categories').update({ name }).eq('id', id);
+                const { error: err } = await window.supabaseClient.from('categories').update({ name }).eq('id', id);
                 error = err;
             } else {
-                const { error: err } = await supabase.from('categories').insert([{ name }]);
+                const { error: err } = await window.supabaseClient.from('categories').insert([{ name }]);
                 error = err;
             }
 
@@ -375,7 +437,7 @@
 
     async function deleteCategory(id) {
         try {
-            const { error } = await supabase.from('categories').delete().eq('id', id);
+            const { error } = await window.supabaseClient.from('categories').delete().eq('id', id);
             if (error) throw error;
             await loadCategories();
         } catch (error) {
@@ -386,7 +448,7 @@
     // Gallery CRUD
     async function loadGallery() {
         try {
-            const { data, error } = await supabase.from('gallery_images').select('*').order('order_index');
+            const { data, error } = await window.supabaseClient.from('gallery_images').select('*').order('order_index');
             if (error) throw error;
             gallery = data || [];
             renderAdminGallery();
@@ -440,15 +502,15 @@
         modal.className = 'modal active';
         modal.id = 'galleryFormModal';
         modal.innerHTML = `
-            <div class="modal-content">
+            <div class="modal-content modal-narrow">
                 <button class="modal-close" id="closeGalleryModal">&times;</button>
                 <div class="modal-header">
                     <h2>${isEdit ? 'Editar' : 'Nueva'} Imagen de Galería</h2>
                 </div>
-                <form id="galleryForm" class="modal-form">
+                <form id="galleryForm" class="modal-form" novalidate>
                     <input type="hidden" id="galleryId" value="${isEdit ? image.id : ''}">
                     <div class="form-group">
-                        <label for="galleryTitle">Título</label>
+                        <label for="galleryTitle">Título <span class="required">*</span></label>
                         <input type="text" id="galleryTitle" required value="${isEdit ? image.title : ''}">
                     </div>
                     <div class="form-group">
@@ -456,26 +518,24 @@
                         <textarea id="galleryDescription" rows="3">${isEdit ? image.description || '' : ''}</textarea>
                     </div>
                     <div class="form-group">
-                        <label for="galleryImageUrl">URL de Imagen</label>
-                        <input type="url" id="galleryImageUrl" required value="${isEdit ? image.image_url : ''}">
+                        <label for="galleryImageUrl">URL de Imagen <span class="required">*</span></label>
+                        <input type="url" id="galleryImageUrl" required value="${isEdit ? image.image_url : ''}" placeholder="https://...">
                     </div>
                     <div class="form-group">
                         <label for="galleryOrder">Orden</label>
                         <input type="number" id="galleryOrder" value="${isEdit ? image.order_index : 0}">
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block">${isEdit ? 'Actualizar' : 'Agregar'} Imagen</button>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">${isEdit ? 'Actualizar' : 'Agregar'} Imagen</button>
+                        <button type="button" class="btn btn-secondary modal-cancel" data-target="galleryFormModal">Cancelar</button>
+                    </div>
                 </form>
             </div>
         `;
 
         document.body.appendChild(modal);
-
-        document.getElementById('closeGalleryModal')?.addEventListener('click', () => modal.remove());
-
-        document.getElementById('galleryForm')?.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            await saveGalleryImage();
-        });
+        addModalClose('closeGalleryModal', modal);
+        addFormSubmit('galleryForm', saveGalleryImage);
     }
 
     async function saveGalleryImage() {
@@ -490,10 +550,10 @@
         try {
             let error;
             if (id) {
-                const { error: err } = await supabase.from('gallery_images').update(imageData).eq('id', id);
+                const { error: err } = await window.supabaseClient.from('gallery_images').update(imageData).eq('id', id);
                 error = err;
             } else {
-                const { error: err } = await supabase.from('gallery_images').insert([imageData]);
+                const { error: err } = await window.supabaseClient.from('gallery_images').insert([imageData]);
                 error = err;
             }
 
@@ -508,7 +568,7 @@
 
     async function deleteGalleryImage(id) {
         try {
-            const { error } = await supabase.from('gallery_images').delete().eq('id', id);
+            const { error } = await window.supabaseClient.from('gallery_images').delete().eq('id', id);
             if (error) throw error;
             await loadGallery();
         } catch (error) {
@@ -519,7 +579,7 @@
     // Leadership CRUD
     async function loadLeadership() {
         try {
-            const { data, error } = await supabase
+            const { data, error } = await window.supabaseClient
                 .from('leadership_members')
                 .select('*')
                 .order('order_index');
@@ -575,46 +635,46 @@
         modal.className = 'modal active';
         modal.id = 'leadershipFormModal';
         modal.innerHTML = `
-            <div class="modal-content">
+            <div class="modal-content modal-narrow">
                 <button class="modal-close" id="closeLeadershipModal">&times;</button>
                 <div class="modal-header">
                     <h2>${isEdit ? 'Editar' : 'Nuevo'} Miembro</h2>
                 </div>
-                <form id="leadershipForm" class="modal-form">
+                <form id="leadershipForm" class="modal-form" novalidate>
                     <input type="hidden" id="leadershipId" value="${isEdit ? member.id : ''}">
-                    <div class="form-group">
-                        <label for="memberName">Nombre</label>
-                        <input type="text" id="memberName" required value="${isEdit ? member.name : ''}">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="memberName">Nombre <span class="required">*</span></label>
+                            <input type="text" id="memberName" required value="${isEdit ? member.name : ''}">
+                        </div>
+                        <div class="form-group">
+                            <label for="memberPosition">Cargo <span class="required">*</span></label>
+                            <input type="text" id="memberPosition" required value="${isEdit ? member.position : ''}">
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label for="memberPosition">Cargo</label>
-                        <input type="text" id="memberPosition" required value="${isEdit ? member.position : ''}">
+                        <label for="memberPhoto">URL de Foto <span class="optional">(opcional)</span></label>
+                        <input type="url" id="memberPhoto" value="${isEdit ? member.photo_url || '' : ''}" placeholder="https://...">
                     </div>
                     <div class="form-group">
-                        <label for="memberPhoto">URL de Foto</label>
-                        <input type="url" id="memberPhoto" value="${isEdit ? member.photo_url || '' : ''}">
-                    </div>
-                    <div class="form-group">
-                        <label for="memberBio">Biografía</label>
+                        <label for="memberBio">Biografía <span class="optional">(opcional)</span></label>
                         <textarea id="memberBio" rows="4">${isEdit ? member.biography || '' : ''}</textarea>
                     </div>
                     <div class="form-group">
                         <label for="memberOrder">Orden</label>
                         <input type="number" id="memberOrder" value="${isEdit ? member.order_index : 0}">
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block">${isEdit ? 'Actualizar' : 'Agregar'} Miembro</button>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">${isEdit ? 'Actualizar' : 'Agregar'} Miembro</button>
+                        <button type="button" class="btn btn-secondary modal-cancel" data-target="leadershipFormModal">Cancelar</button>
+                    </div>
                 </form>
             </div>
         `;
 
         document.body.appendChild(modal);
-
-        document.getElementById('closeLeadershipModal')?.addEventListener('click', () => modal.remove());
-
-        document.getElementById('leadershipForm')?.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            await saveLeadershipMember();
-        });
+        addModalClose('closeLeadershipModal', modal);
+        addFormSubmit('leadershipForm', saveLeadershipMember);
     }
 
     async function saveLeadershipMember() {
@@ -630,10 +690,10 @@
         try {
             let error;
             if (id) {
-                const { error: err } = await supabase.from('leadership_members').update(memberData).eq('id', id);
+                const { error: err } = await window.supabaseClient.from('leadership_members').update(memberData).eq('id', id);
                 error = err;
             } else {
-                const { error: err } = await supabase.from('leadership_members').insert([memberData]);
+                const { error: err } = await window.supabaseClient.from('leadership_members').insert([memberData]);
                 error = err;
             }
 
@@ -648,7 +708,7 @@
 
     async function deleteLeadershipMember(id) {
         try {
-            const { error } = await supabase.from('leadership_members').delete().eq('id', id);
+            const { error } = await window.supabaseClient.from('leadership_members').delete().eq('id', id);
             if (error) throw error;
             await loadLeadership();
         } catch (error) {
@@ -659,7 +719,7 @@
     // Settings
     async function loadSettings() {
         try {
-            const { data, error } = await supabase.from('club_information').select('*').single();
+            const { data, error } = await window.supabaseClient.from('club_information').select('*').single();
 
             if (error && error.code !== 'PGRST116') throw error;
 
@@ -686,14 +746,14 @@
         };
 
         try {
-            const { data: existing } = await supabase.from('club_information').select('id').single();
+            const { data: existing } = await window.supabaseClient.from('club_information').select('id').single();
 
             let error;
             if (existing) {
-                const { error: err } = await supabase.from('club_information').update(settingsData).eq('id', existing.id);
+                const { error: err } = await window.supabaseClient.from('club_information').update(settingsData).eq('id', existing.id);
                 error = err;
             } else {
-                const { error: err } = await supabase.from('club_information').insert([settingsData]);
+                const { error: err } = await window.supabaseClient.from('club_information').insert([settingsData]);
                 error = err;
             }
 

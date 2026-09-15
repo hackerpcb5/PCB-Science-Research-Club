@@ -114,6 +114,63 @@ button {
     color: var(--white);
 }
 
+.nav-dropdown {
+    position: relative;
+}
+
+.nav-dropdown-toggle {
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: var(--transition);
+    color: var(--text);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.nav-dropdown-toggle:hover {
+    background: var(--primary);
+    color: var(--white);
+}
+
+.nav-dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 8px;
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    min-width: 220px;
+    list-style: none;
+    padding: 8px 0;
+    z-index: 1000;
+}
+
+.nav-dropdown.active .nav-dropdown-menu {
+    display: block;
+}
+
+.nav-dropdown-menu li a {
+    display: block;
+    padding: 10px 20px;
+    color: var(--text);
+    font-size: 0.9rem;
+    transition: var(--transition);
+    text-decoration: none;
+}
+
+.nav-dropdown-menu li a:hover {
+    background: var(--primary);
+    color: var(--white);
+}
+
 .header-actions {
     display: flex;
     align-items: center;
@@ -392,6 +449,10 @@ button {
     max-width: 450px;
 }
 
+.modal-narrow {
+    max-width: 720px;
+}
+
 @keyframes modalSlideIn {
     from {
         opacity: 0;
@@ -486,6 +547,34 @@ button {
     font-size: 0.9rem;
 }
 
+.modal-form .form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+}
+
+.modal-form .form-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: 24px;
+}
+
+.modal-form .form-actions .btn {
+    min-width: 140px;
+}
+
+.modal-form .form-actions .btn-secondary {
+    margin-left: auto;
+}
+
+.optional {
+    color: var(--text-light);
+    font-weight: 400;
+    font-size: 0.85rem;
+}
+
 .modal-form input,
 .modal-form textarea,
 .modal-form select {
@@ -508,6 +597,10 @@ button {
 .modal-form textarea {
     resize: vertical;
     min-height: 100px;
+}
+
+.required {
+    color: var(--accent);
 }
 
 .forgot-password {

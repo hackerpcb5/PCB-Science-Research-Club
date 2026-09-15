@@ -19,7 +19,7 @@
 
     async function loadClubInformation() {
         try {
-            const { data, error } = await supabase
+            const { data, error } = await window.supabaseClient
                 .from('club_information')
                 .select('*')
                 .single();
@@ -40,7 +40,7 @@
 
     async function loadGallery() {
         try {
-            const { data, error } = await supabase
+            const { data, error } = await window.supabaseClient
                 .from('gallery_images')
                 .select('*')
                 .order('order_index', { ascending: true });
@@ -135,7 +135,7 @@
 
     async function loadLeadership() {
         try {
-            const { data, error } = await supabase
+            const { data, error } = await window.supabaseClient
                 .from('leadership_members')
                 .select('*')
                 .order('order_index', { ascending: true });
