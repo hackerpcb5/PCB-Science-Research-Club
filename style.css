@@ -619,6 +619,20 @@ button {
     color: var(--accent);
 }
 
+.url-with-upload {
+    display: flex;
+    align-items stretch;
+    gap: 8px;
+}
+
+.url-with-upload input {
+    flex: 1;
+}
+
+.url-with-upload .btn {
+    white-space: nowrap;
+}
+
 .forgot-password {
     display: block;
     text-align: center;

@@ -9,6 +9,7 @@
     let categories = [];
     let gallery = [];
     let leadership = [];
+    const UPLOAD_BUCKET = 'uploads';
 
     document.addEventListener('DOMContentLoaded', init);
 
@@ -16,6 +17,7 @@
         const authenticated = await checkAuth();
         if (!authenticated) return;
         setupEventListeners();
+        await loadAllData();
     }
 
     async function checkAuth() {
@@ -225,6 +227,66 @@
         });
     }
 
+    async function uploadFile(file, bucket = UPLOAD_BUCKET, folder = '') {
+        try {
+            if (!file) return null;
+
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+            const filePath = folder ? `${folder}/${fileName}` : fileName;
+
+            const { data, error } = await window.supabaseClient.storage
+                .from(bucket)
+                .upload(filePath, file);
+
+            if (error) throw error;
+
+            const { data: { publicUrl } } = window.supabaseClient.storage
+                .from(bucket)
+                .getPublicUrl(filePath);
+
+            return publicUrl;
+        } catch (error) {
+            console.error('Error uploading file:', error);
+            alert('Error al subir el archivo: ' + error.message);
+            return null;
+        }
+    }
+
+    function createFileInputHandler(urlFieldId, uploadBtnId, bucket = UPLOAD_BUCKET) {
+        const urlField = document.getElementById(urlFieldId);
+        const uploadBtn = document.getElementById(uploadBtnId);
+        if (!uploadBtn || !urlField) return;
+
+        uploadBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*,.pdf,application/pdf,video/*,audio/*';
+            input.style.display = 'none';
+
+            input.onchange = async (ev) => {
+                const file = ev.target.files[0];
+                if (!file) return;
+
+                uploadBtn.disabled = true;
+                uploadBtn.textContent = 'Subiendo...';
+
+                const url = await uploadFile(file, bucket);
+                if (url) {
+                    urlField.value = url;
+                }
+
+                uploadBtn.disabled = false;
+                uploadBtn.textContent = 'Importar archivo';
+            };
+
+            input.click();
+        });
+    }
+
     async function openArticleModal(article = null) {
         const isEdit = !!article;
         const categoriesSelect = await getCategoriesOptions();
@@ -265,12 +327,18 @@
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="articleCover">Imagen de Portada (URL) <span class="optional">(opcional)</span></label>
-                            <input type="url" id="articleCover" value="${isEdit ? article.cover_image || '' : ''}" placeholder="https://...">
+                            <label for="articleCover">Imagen de Portada <span class="optional">(opcional)</span></label>
+                            <div class="url-with-upload">
+                                <input type="url" id="articleCover" value="${isEdit ? article.cover_image || '' : ''}" placeholder="https://...">
+                                <button type="button" class="btn btn-sm btn-secondary" id="uploadArticleCover">Importar archivo</button>
+                            </div>
                         </div>
                         <div class="form-group">
-                            <label for="articlePdf">PDF (URL) <span class="optional">(opcional)</span></label>
-                            <input type="url" id="articlePdf" value="${isEdit ? article.pdf_url || '' : ''}" placeholder="https://...">
+                            <label for="articlePdf">PDF <span class="optional">(opcional)</span></label>
+                            <div class="url-with-upload">
+                                <input type="url" id="articlePdf" value="${isEdit ? article.pdf_url || '' : ''}" placeholder="https://...">
+                                <button type="button" class="btn btn-sm btn-secondary" id="uploadArticlePdf">Importar archivo</button>
+                            </div>
                         </div>
                     </div>
                     <div class="form-actions">
@@ -284,6 +352,8 @@
         document.body.appendChild(modal);
         addModalClose('closeArticleModal', modal);
         addFormSubmit('articleForm', saveArticle);
+        createFileInputHandler('articleCover', 'uploadArticleCover', 'article-covers');
+        createFileInputHandler('articlePdf', 'uploadArticlePdf', 'articles-pdfs');
     }
 
     async function getCategoriesOptions() {
@@ -517,10 +587,13 @@
                         <label for="galleryDescription">Descripción</label>
                         <textarea id="galleryDescription" rows="3">${isEdit ? image.description || '' : ''}</textarea>
                     </div>
-                    <div class="form-group">
-                        <label for="galleryImageUrl">URL de Imagen <span class="required">*</span></label>
-                        <input type="url" id="galleryImageUrl" required value="${isEdit ? image.image_url : ''}" placeholder="https://...">
-                    </div>
+                     <div class="form-group">
+                         <label for="galleryImageUrl">URL de Imagen <span class="required">*</span></label>
+                         <div class="url-with-upload">
+                             <input type="url" id="galleryImageUrl" required value="${isEdit ? image.image_url : ''}" placeholder="https://...">
+                             <button type="button" class="btn btn-sm btn-secondary" id="uploadGalleryImage">Importar archivo</button>
+                         </div>
+                     </div>
                     <div class="form-group">
                         <label for="galleryOrder">Orden</label>
                         <input type="number" id="galleryOrder" value="${isEdit ? image.order_index : 0}">
@@ -536,6 +609,7 @@
         document.body.appendChild(modal);
         addModalClose('closeGalleryModal', modal);
         addFormSubmit('galleryForm', saveGalleryImage);
+        createFileInputHandler('galleryImageUrl', 'uploadGalleryImage', 'gallery');
     }
 
     async function saveGalleryImage() {
@@ -654,7 +728,10 @@
                     </div>
                     <div class="form-group">
                         <label for="memberPhoto">URL de Foto <span class="optional">(opcional)</span></label>
-                        <input type="url" id="memberPhoto" value="${isEdit ? member.photo_url || '' : ''}" placeholder="https://...">
+                        <div class="url-with-upload">
+                            <input type="url" id="memberPhoto" value="${isEdit ? member.photo_url || '' : ''}" placeholder="https://...">
+                            <button type="button" class="btn btn-sm btn-secondary" id="uploadMemberPhoto">Importar archivo</button>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="memberBio">Biografía <span class="optional">(opcional)</span></label>
@@ -675,6 +752,7 @@
         document.body.appendChild(modal);
         addModalClose('closeLeadershipModal', modal);
         addFormSubmit('leadershipForm', saveLeadershipMember);
+        createFileInputHandler('memberPhoto', 'uploadMemberPhoto', 'gallery');
     }
 
     async function saveLeadershipMember() {
