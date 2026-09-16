@@ -453,6 +453,14 @@ button {
     max-width: 720px;
 }
 
+.modal-form-content.modal-narrow {
+    max-width: 640px;
+}
+
+.modal-form-content.modal-small {
+    max-width: 500px;
+}
+
 @keyframes modalSlideIn {
     from {
         opacity: 0;
@@ -536,8 +544,12 @@ button {
     flex-wrap: wrap;
 }
 
+.modal-form {
+    padding: 24px;
+}
+
 .modal-form .form-group {
-    margin-bottom: 16px;
+    margin-bottom: 18px;
 }
 
 .modal-form label {
@@ -549,7 +561,7 @@ button {
 
 .modal-form .form-row {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 16px;
 }
 
@@ -558,11 +570,14 @@ button {
     gap: 12px;
     align-items: center;
     justify-content: flex-end;
-    margin-top: 24px;
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
 }
 
 .modal-form .form-actions .btn {
-    min-width: 140px;
+    min-width: 130px;
+    padding: 10px 24px;
 }
 
 .modal-form .form-actions .btn-secondary {
@@ -584,6 +599,7 @@ button {
     border-radius: 6px;
     font-size: 0.95rem;
     transition: var(--transition);
+    box-sizing: border-box;
 }
 
 .modal-form input:focus,
@@ -1376,5 +1392,9 @@ button {
 
     .article-card-image {
         height: 180px;
+    }
+
+    .modal-form .form-row {
+        grid-template-columns: 1fr;
     }
 }

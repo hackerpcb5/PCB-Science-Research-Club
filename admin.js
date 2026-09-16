@@ -233,7 +233,7 @@
         modal.className = 'modal active';
         modal.id = 'articleFormModal';
         modal.innerHTML = `
-            <div class="modal-content modal-narrow">
+            <div class="modal-content modal-narrow modal-form-content">
                 <button class="modal-close" id="closeArticleModal">&times;</button>
                 <div class="modal-header">
                     <h2>${isEdit ? 'Editar' : 'Nuevo'} Artículo</h2>
@@ -388,7 +388,7 @@
         modal.className = 'modal active';
         modal.id = 'categoryFormModal';
         modal.innerHTML = `
-            <div class="modal-content modal-small">
+            <div class="modal-content modal-small modal-form-content">
                 <button class="modal-close" id="closeCategoryModal">&times;</button>
                 <div class="modal-header">
                     <h2>${isEdit ? 'Editar' : 'Nueva'} Categoría</h2>
@@ -502,7 +502,7 @@
         modal.className = 'modal active';
         modal.id = 'galleryFormModal';
         modal.innerHTML = `
-            <div class="modal-content modal-narrow">
+            <div class="modal-content modal-narrow modal-form-content">
                 <button class="modal-close" id="closeGalleryModal">&times;</button>
                 <div class="modal-header">
                     <h2>${isEdit ? 'Editar' : 'Nueva'} Imagen de Galería</h2>
@@ -635,7 +635,7 @@
         modal.className = 'modal active';
         modal.id = 'leadershipFormModal';
         modal.innerHTML = `
-            <div class="modal-content modal-narrow">
+            <div class="modal-content modal-narrow modal-form-content">
                 <button class="modal-close" id="closeLeadershipModal">&times;</button>
                 <div class="modal-header">
                     <h2>${isEdit ? 'Editar' : 'Nuevo'} Miembro</h2>
