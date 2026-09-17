@@ -561,6 +561,30 @@ button {
     background: var(--white);
 }
 
+@media (max-width: 1024px) {
+    .pdf-viewer iframe {
+        height: 500px;
+    }
+}
+
+@media (max-width: 768px) {
+    .pdf-viewer iframe {
+        height: 400px;
+    }
+}
+
+@media (max-width: 480px) {
+    .pdf-viewer iframe {
+        height: 350px;
+    }
+}
+
+@media (max-width: 360px) {
+    .pdf-viewer iframe {
+        height: 300px;
+    }
+}
+
 /* Adjust modal content for PDF viewer */
 .modal-content {
     position: relative;
