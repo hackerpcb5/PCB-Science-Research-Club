@@ -129,16 +129,20 @@
         document.getElementById('modalSummary').textContent = article.summary;
 
         const pdfBtn = document.getElementById('modalPdfBtn');
-        const downloadBtn = document.getElementById('modalDownloadBtn');
+        const pdfViewer = document.getElementById('pdfViewer');
+        const pdfFrame = document.getElementById('pdfFrame');
 
         if (article.pdf_url) {
             pdfBtn.href = article.pdf_url;
             pdfBtn.style.display = 'inline-flex';
-            downloadBtn.href = article.pdf_url;
-            downloadBtn.style.display = 'inline-flex';
+            
+            // Show PDF viewer automatically below description
+            pdfFrame.src = article.pdf_url;
+            pdfViewer.style.display = 'block';
         } else {
             pdfBtn.style.display = 'none';
-            downloadBtn.style.display = 'none';
+            pdfViewer.style.display = 'none';
+            pdfFrame.src = '';
         }
 
         modal.classList.add('active');
