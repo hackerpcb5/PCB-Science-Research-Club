@@ -135,10 +135,15 @@
         if (article.pdf_url) {
             pdfBtn.href = article.pdf_url;
             pdfBtn.style.display = 'inline-flex';
+            pdfBtn.textContent = article.pdf_show_in_modal !== false ? 'Abrir en nueva pestaña' : 'Descargar PDF';
             
-            // Show PDF viewer automatically below description
-            pdfFrame.src = article.pdf_url;
-            pdfViewer.style.display = 'block';
+            if (article.pdf_show_in_modal !== false) {
+                pdfFrame.src = article.pdf_url;
+                pdfViewer.style.display = 'block';
+            } else {
+                pdfViewer.style.display = 'none';
+                pdfFrame.src = '';
+            }
         } else {
             pdfBtn.style.display = 'none';
             pdfViewer.style.display = 'none';

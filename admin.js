@@ -339,6 +339,10 @@
                                 <input type="url" id="articlePdf" value="${isEdit ? article.pdf_url || '' : ''}" placeholder="https://...">
                                 <button type="button" class="btn btn-sm btn-secondary" id="uploadArticlePdf">Importar archivo</button>
                             </div>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="articlePdfShowInModal" ${isEdit ? (article.pdf_show_in_modal !== false ? 'checked' : '') : 'checked'}>
+                                <span>Mostrar PDF en el modal del artículo</span>
+                            </label>
                         </div>
                     </div>
                     <div class="form-actions">
@@ -374,6 +378,7 @@
             summary: document.getElementById('articleSummary').value,
             cover_image: document.getElementById('articleCover').value || null,
             pdf_url: document.getElementById('articlePdf').value || null,
+            pdf_show_in_modal: document.getElementById('articlePdfShowInModal')?.checked !== false,
         };
 
         try {

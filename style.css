@@ -696,6 +696,27 @@ button {
     color: var(--accent);
 }
 
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: var(--text);
+    cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primary);
+    cursor: pointer;
+}
+
+.checkbox-label span {
+    user-select: none;
+}
+
 .url-with-upload {
     display: flex;
     align-items stretch;

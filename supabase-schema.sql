@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS articles (
     category_id UUID REFERENCES categories(id),
     summary TEXT NOT NULL,
     pdf_url TEXT,
+    pdf_show_in_modal BOOLEAN DEFAULT true,
     cover_image TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -106,3 +107,6 @@ CREATE INDEX IF NOT EXISTS idx_articles_created_at ON articles(created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_articles_category_id ON articles(category_id);
 CREATE INDEX IF NOT EXISTS idx_gallery_order ON gallery_images(order_index);
 CREATE INDEX IF NOT EXISTS idx_leadership_order ON leadership_members(order_index);
+
+-- Migration: add pdf_show_in_modal column if it doesn't exist
+ALTER TABLE articles ADD COLUMN IF NOT EXISTS pdf_show_in_modal BOOLEAN DEFAULT true;
