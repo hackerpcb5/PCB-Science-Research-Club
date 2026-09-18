@@ -171,7 +171,7 @@
         const tbody = document.getElementById('articlesTableBody');
 
         if (!articles.length) {
-            tbody.innerHTML = '<tr><td colspan="5" class="loading-text">No hay artículos.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="6" class="loading-text">No hay artículos.</td></tr>';
             return;
         }
 
@@ -181,6 +181,7 @@
                 <td>${article.author}</td>
                 <td>${article.categories?.name || 'N/A'}</td>
                 <td>${formatDate(article.created_at)}</td>
+                <td>${article.content_url ? '<span style="color:var(--accent);font-weight:600;">Sí</span>' : 'No'}</td>
                 <td>
                     <button class="btn btn-sm btn-primary edit-btn" data-id="${article.id}">Editar</button>
                     <button class="btn btn-sm btn-danger delete-btn" data-id="${article.id}">Eliminar</button>
@@ -325,6 +326,14 @@
                         <label for="articleSummary">Resumen <span class="required">*</span></label>
                         <textarea id="articleSummary" required rows="4">${isEdit ? article.summary : ''}</textarea>
                     </div>
+                    <div class="form-group">
+                        <label for="articleContentUrl">Contenido Multimedia / Enlace <span class="optional">(opcional)</span></label>
+                        <input type="url" id="articleContentUrl" value="${isEdit ? article.content_url || '' : ''}" placeholder="https://...">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="articleContentIsVideo" ${isEdit ? (article.content_is_video ? 'checked' : '') : 'checked'}>
+                            <span>Es un video (se incrustará en el artículo)</span>
+                        </label>
+                    </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label for="articleCover">Imagen de Portada <span class="optional">(opcional)</span></label>
@@ -379,6 +388,8 @@
             cover_image: document.getElementById('articleCover').value || null,
             pdf_url: document.getElementById('articlePdf').value || null,
             pdf_show_in_modal: document.getElementById('articlePdfShowInModal')?.checked !== false,
+            content_url: document.getElementById('articleContentUrl').value || null,
+            content_is_video: document.getElementById('articleContentIsVideo')?.checked === true,
         };
 
         try {

@@ -115,6 +115,29 @@
         });
     }
 
+    function getEmbedUrl(url) {
+        if (!url) return null;
+        try {
+            const urlObj = new URL(url);
+            if (urlObj.hostname.includes('youtube.com') || urlObj.hostname.includes('youtu.be')) {
+                let videoId = '';
+                if (urlObj.hostname.includes('youtu.be')) {
+                    videoId = urlObj.pathname.slice(1);
+                } else {
+                    videoId = urlObj.searchParams.get('v') || '';
+                }
+                if (videoId) return `https://www.youtube.com/embed/${videoId}`;
+            }
+            if (urlObj.hostname.includes('vimeo.com')) {
+                const videoId = urlObj.pathname.split('/').filter(Boolean).pop() || '';
+                if (videoId) return `https://player.vimeo.com/video/${videoId}`;
+            }
+        } catch {
+            return null;
+        }
+        return null;
+    }
+
     async function openArticleModal(articleId) {
         const modal = document.getElementById('articleModal');
         const article = allArticles.find(a => a.id === articleId);
@@ -127,6 +150,30 @@
         document.getElementById('modalAuthor').textContent = `Por ${article.author}`;
         document.getElementById('modalDate').textContent = formatDate(article.created_at);
         document.getElementById('modalSummary').textContent = article.summary;
+
+        const contentMedia = document.getElementById('modalContentMedia');
+        const contentBtn = document.getElementById('modalContentBtn');
+        contentMedia.innerHTML = '';
+        contentBtn.style.display = 'none';
+
+        if (article.content_url) {
+            if (article.content_is_video) {
+                const embedUrl = getEmbedUrl(article.content_url);
+                if (embedUrl) {
+                    contentMedia.innerHTML = `<div class="video-embed"><iframe src="${embedUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`;
+                } else {
+                    contentMedia.innerHTML = '';
+                    contentBtn.href = article.content_url;
+                    contentBtn.textContent = 'Ver Video / Contenido';
+                    contentBtn.style.display = 'inline-flex';
+                }
+            } else {
+                contentMedia.innerHTML = '';
+                contentBtn.href = article.content_url;
+                contentBtn.textContent = 'Ver Contenido';
+                contentBtn.style.display = 'inline-flex';
+            }
+        }
 
         const pdfBtn = document.getElementById('modalPdfBtn');
         const pdfViewer = document.getElementById('pdfViewer');
