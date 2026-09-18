@@ -232,6 +232,13 @@
         try {
             if (!file) return null;
 
+            if (file.type.startsWith('image/')) {
+                console.log('[upload] Imagen detectada:', file.name, file.type, file.size);
+                const originalSize = file.size;
+                file = await resizeImage(file, 1200, 0.85);
+                console.log('[upload] Imagen redimensionada. Tamaño original:', originalSize, 'Nuevo tamaño:', file.size, 'Nombre:', file.name);
+            }
+
             const fileExt = file.name.split('.').pop();
             const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
             const filePath = folder ? `${folder}/${fileName}` : fileName;
@@ -248,10 +255,51 @@
 
             return publicUrl;
         } catch (error) {
-            console.error('Error uploading file:', error);
+            console.error('[upload] Error:', error);
             alert('Error al subir el archivo: ' + error.message);
             return null;
         }
+    }
+
+    function resizeImage(file, maxWidth, quality) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > maxWidth) {
+                        height = (height * maxWidth) / width;
+                        width = maxWidth;
+                    }
+
+                    const canvas = document.createElement('canvas');
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    canvas.toBlob(
+                        (blob) => {
+                            if (blob) {
+                                blob.name = file.name.replace(/\.[^/.]+$/, '') + '.jpg';
+                                resolve(blob);
+                            } else {
+                                reject(new Error('No se pudo procesar la imagen'));
+                            }
+                        },
+                        'image/jpeg',
+                        quality
+                    );
+                };
+                img.onerror = () => reject(new Error('Error al cargar la imagen'));
+                img.src = e.target.result;
+            };
+            reader.onerror = () => reject(new Error('Error al leer el archivo'));
+            reader.readAsDataURL(file);
+        });
     }
 
     function createFileInputHandler(urlFieldId, uploadBtnId, bucket = UPLOAD_BUCKET) {
