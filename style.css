@@ -217,11 +217,10 @@ button {
 }
 
 .hero-logo {
-    height: 100px;
-    width: 100px;
+    height: 200px;
+    width: 200px;
     display: block;
-    margin: 0 auto 20px;
-    filter: brightness(0) invert(1);
+    margin: 0 auto 24px;
     object-fit: contain;
 }
 
@@ -834,7 +833,6 @@ button {
 
 .footer-logo {
     height: 60px;
-    filter: brightness(0) invert(1);
     margin-bottom: 16px;
 }
 
@@ -1470,6 +1468,11 @@ button {
 
     .hero {
         padding: 60px 0;
+    }
+
+    .hero-logo {
+        height: 160px;
+        width: 160px;
     }
 
     .footer-content {
