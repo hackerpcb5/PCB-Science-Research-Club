@@ -27,10 +27,10 @@
             if (error) throw error;
 
             if (data) {
-                document.getElementById('clubHistory').innerHTML = `<p>${data.history || 'Información no disponible.'}</p>`;
-                document.getElementById('clubMission').innerHTML = `<p>${data.mission || 'Información no disponible.'}</p>`;
-                document.getElementById('clubVision').innerHTML = `<p>${data.vision || 'Información no disponible.'}</p>`;
-                document.getElementById('logoMeaning').innerHTML = `<p>${data.logo_meaning || 'Información no disponible.'}</p>`;
+                document.getElementById('clubHistory').innerHTML = `<p style="white-space: pre-wrap;">${data.history || 'Información no disponible.'}</p>`;
+                document.getElementById('clubMission').innerHTML = `<p style="white-space: pre-wrap;">${data.mission || 'Información no disponible.'}</p>`;
+                document.getElementById('clubVision').innerHTML = `<p style="white-space: pre-wrap;">${data.vision || 'Información no disponible.'}</p>`;
+                document.getElementById('logoMeaning').innerHTML = `<p style="white-space: pre-wrap;">${data.logo_meaning || 'Información no disponible.'}</p>`;
             }
         } catch (error) {
             console.error('Error loading club information:', error);

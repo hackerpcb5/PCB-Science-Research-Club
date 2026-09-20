@@ -1128,6 +1128,8 @@ button {
     border-right: 1px solid var(--border);
     padding: 20px 0;
     flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
 }
 
 .admin-nav {
@@ -1162,8 +1164,21 @@ button {
     overflow-y: auto;
 }
 
+.admin-back {
+    padding: 12px;
+    border-top: 1px solid var(--border);
+    margin-top: auto;
+}
+
 .admin-section h2 {
-    margin-bottom: 24px;
+    margin-bottom: 36px;
+}
+
+#addArticleBtn,
+#addCategoryBtn,
+#addGalleryBtn,
+#addLeadershipBtn {
+    margin-top: 24px;
 }
 
 .table-container {
@@ -1176,7 +1191,12 @@ button {
 
 .admin-table {
     width: 100%;
+    min-width: 100%;
     border-collapse: collapse;
+}
+
+.admin-table thead {
+    background: var(--primary);
 }
 
 .admin-table th,
@@ -1184,6 +1204,7 @@ button {
     padding: 14px 16px;
     text-align: left;
     border-bottom: 1px solid var(--border);
+    overflow-wrap: anywhere;
 }
 
 .admin-table th {
@@ -1193,6 +1214,7 @@ button {
     font-size: 0.9rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    white-space: nowrap;
 }
 
 .admin-table tr:hover {
