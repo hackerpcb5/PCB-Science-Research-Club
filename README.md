@@ -17,7 +17,7 @@ PCB-Science-Research-Club-main/
 ├── about.html              # Página informativa del club
 ├── admin.html              # Panel de administración
 ├── login.html              # Acceso administrativo
-├── Logo.png                # Logo del club
+├── logo.png                 # Logo del club
 ├── style.css               # Estilos CSS
 ├── config.js               # Configuración de Supabase
 ├── main.js                 # Lógica de la página principal
@@ -193,7 +193,7 @@ Edita las variables CSS en `style.css`:
 
 ### Logo
 
-Reemplaza `Logo.png` con el logo oficial del club.
+Reemplaza `logo.png` con el logo oficial del club.
 
 ### Contenido
 

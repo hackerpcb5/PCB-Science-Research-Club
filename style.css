@@ -1,8 +1,9 @@
 :root {
     --primary: #0f3460;
     --secondary: #16213e;
-    --accent: #e94560;
-    --gold: #d4af37;
+    --accent: #f0b429;
+    --gold: #f0b429;
+    --gold-dark: #d4910e;
     --text: #1a1a2e;
     --text-light: #666;
     --bg: #f8f9fa;
@@ -217,8 +218,11 @@ button {
 
 .hero-logo {
     height: 100px;
+    width: 100px;
+    display: block;
     margin: 0 auto 20px;
     filter: brightness(0) invert(1);
+    object-fit: contain;
 }
 
 .hero-title {
@@ -381,7 +385,7 @@ button {
 }
 
 .btn-primary:hover {
-    background: #d63850;
+    background: var(--gold-dark);
     transform: translateY(-2px);
 }
 
