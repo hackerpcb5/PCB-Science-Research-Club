@@ -257,6 +257,10 @@ button {
     font-weight: 300;
 }
 
+.hero .btn {
+    margin-top: 24px;
+}
+
 /* Articles Section */
 .articles-section {
     padding: 60px 0;
