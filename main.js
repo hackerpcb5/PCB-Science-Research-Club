@@ -14,7 +14,6 @@
         await loadCategories();
         await loadArticles();
         setupEventListeners();
-        setupMobileMenu();
     }
 
     async function loadCategories() {
@@ -256,16 +255,5 @@
 
         const filtered = allArticles.filter(a => a.category_id === currentFilter);
         renderArticles(filtered);
-    }
-
-    function setupMobileMenu() {
-        const btn = document.getElementById('mobileMenuBtn');
-        const nav = document.getElementById('mainNav');
-
-        if (btn && nav) {
-            btn.addEventListener('click', () => {
-                nav.classList.toggle('active');
-            });
-        }
     }
 })();

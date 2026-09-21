@@ -208,6 +208,23 @@ button {
     transition: var(--transition);
 }
 
+.about-link-mobile {
+    display: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: var(--transition);
+    color: var(--text);
+    background: transparent;
+    text-decoration: none;
+}
+
+.about-link-mobile:hover {
+    background: var(--primary);
+    color: var(--white);
+}
+
 /* Hero */
 .hero {
     background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
@@ -1477,7 +1494,11 @@ button {
     }
 
     .mobile-menu-btn {
-        display: flex;
+        display: none;
+    }
+
+    .about-link-mobile {
+        display: inline-flex;
     }
 
     .header-content {
