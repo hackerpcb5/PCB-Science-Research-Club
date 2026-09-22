@@ -798,7 +798,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="memberBio">Biografía <span class="optional">(opcional)</span></label>
+                        <label for="memberBio">Función <span class="optional">(opcional)</span></label>
                         <textarea id="memberBio" rows="4">${isEdit ? member.biography || '' : ''}</textarea>
                     </div>
                     <div class="form-group">
