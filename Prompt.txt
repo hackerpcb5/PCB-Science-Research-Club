@@ -276,3 +276,96 @@ Generar:
 10. Código completamente funcional listo para producción.
 
 El resultado debe ser profesional, escalable, seguro y apto para un club científico universitario.
+=======================================================================================================================================
+
+Añade una nueva subweb llamada Periódico Escolar dentro del proyecto actual.
+Tecnologías obligatorias
+HTML5
+CSS3
+JavaScript Vanilla
+Supabase (Base de datos y almacenamiento)
+Restricciones importantes
+No utilizar React, Angular, Vue ni otros frameworks.
+No crear un sistema administrativo nuevo.
+Integrar el periódico dentro del panel administrativo existente.
+Mantener la misma autenticación, permisos, diseño y estructura del proyecto actual.
+Nueva sección en el panel administrativo
+Añadir una sección llamada Periódico Escolar dentro del panel de administración existente con las siguientes funcionalidades:
+Gestión de artículos
+Crear artículos.
+Editar artículos.
+Eliminar artículos.
+Programar publicaciones.
+Marcar artículos como destacados.
+Publicar o despublicar artículos.
+Gestión de categorías
+Noticias Escolares
+Deportes
+Cultura
+Ciencia y Tecnología
+Opinión
+Logros Estudiantiles
+Comunidad Escolar
+Gestión multimedia
+Subir imágenes a Supabase Storage.
+Seleccionar imagen principal.
+Galería para cada artículo.
+Gestión de autores
+Crear autores.
+Editar autores.
+Asignar autor a cada noticia.
+Frontend del periódico
+Crear una subweb inspirada en la organización de contenido de El Nuevo Día:
+https://www.elnuevodia.com/
+Sin copiar su diseño exacto.
+Mantener una identidad visual propia para la escuela.
+Página principal
+Hero con noticia principal.
+Noticias destacadas.
+Últimas noticias.
+Noticias más leídas.
+Próximos eventos escolares.
+Barra de búsqueda.
+Filtrado por categorías.
+Página de noticia
+Título.
+Subtítulo.
+Imagen destacada.
+Autor.
+Fecha.
+Tiempo estimado de lectura.
+Contenido completo.
+Artículos relacionados.
+Base de datos Supabase
+Crear únicamente las tablas necesarias:
+periodico_articulos
+id
+titulo
+subtitulo
+slug
+contenido
+imagen_principal
+categoria_id
+autor_id
+destacado
+publicado
+fecha_publicacion
+created_at
+periodico_categorias
+id
+nombre
+color
+periodico_autores
+id
+nombre
+foto
+descripcion
+Integración
+Utilizar la estructura actual de carpetas del proyecto.
+Utilizar el mismo sistema de rutas.
+Utilizar los mismos componentes de navegación, sidebar y permisos existentes.
+Añadir una opción "Periódico Escolar" al menú administrativo.
+Añadir una opción "Periódico" al menú público del sitio.
+Mantener consistencia visual con el resto de la plataforma.
+Entregables
+Generar todo el código HTML, CSS y JavaScript necesario, incluyendo la integración completa con Supabase y la conexión con el panel administrativo existente, sin crear sistemas duplicados.

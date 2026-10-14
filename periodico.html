@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Periódico Escolar del PCB Science Research Club - Noticias, deportes, cultura, ciencia y opinión estudiantil">
+    <meta name="keywords" content="periódico escolar, noticias, ciencia, deportes, cultura, opinión, PCB">
+    <title>Periódico Escolar - PCB Science Research Club</title>
+    <link rel="icon" type="image/png" href="Logo.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="periodico.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    <script>
+        (function () {
+            try {
+                var stored = localStorage.getItem('pcb-theme');
+                var theme = stored || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) { }
+        })();
+    </script>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <img src="Logo.png" alt="PCB Science Research Club Logo" class="logo-img">
+                    <span class="logo-text">PCB Science Research Club</span>
+                </div>
+                <nav class="nav" id="mainNav">
+                    <ul class="nav-list">
+                        <li><a href="index.html" class="nav-link">Inicio</a></li>
+                        <li><a href="about.html" class="nav-link">Sobre el Club</a></li>
+                        <li><a href="periodico.html" class="nav-link active">Periódico</a></li>
+                    </ul>
+                </nav>
+                <div class="header-actions">
+                    <div class="search-bar-container">
+                        <input type="text" id="searchInput" class="search-bar" placeholder="Buscar en el periódico..." aria-label="Buscar noticias">
+                        <button id="searchBtn" class="search-btn" aria-label="Buscar">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" l2="24" y2="22"></line></svg>
+                        </button>
+                    </div>
+                    <select id="categoryFilter" class="category-filter" aria-label="Filtrar por categoría">
+                        <option value="">Todas las categorías</option>
+                    </select>
+                    <button class="theme-toggle" data-theme-toggle type="button" aria-label="Activar modo oscuro" aria-pressed="false" title="Activar modo oscuro">
+                        <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                        <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+                    </button>
+                    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Abrir menú">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <section class="hero-section">
+            <div class="container">
+                <div class="hero-featured" id="heroFeatured">
+                    <div class="loading-spinner">
+                        <div class="spinner"></div>
+                        <p>Cargando...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="newspaper-layout">
+            <div class="container">
+                <div class="newspaper-main">
+                    <div class="newspaper-content">
+                        <section class="periodicidad-section">
+                            <div class="section-header">
+                                <h2 class="section-title">Noticias Destacadas</h2>
+                            </div>
+                            <div class="featured-grid" id="featuredGrid">
+                                <div class="loading-spinner">
+                                    <div class="spinner"></div>
+                                    <p>Cargando...</p>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="newspaper-section">
+                            <div class="section-header">
+                                <h2 class="section-title">Últimas Noticias</h2>
+                            </div>
+                            <div class="article-list" id="latestList">
+                                <div class="loading-spinner">
+                                    <div class="spinner"></div>
+                                    <p>Cargando...</p>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <aside class="newspaper-sidebar">
+                        <div class="sidebar-widget">
+                            <h3 class="widget-title">Más Leídas</h3>
+                            <div class="most-read-list" id="mostReadList">
+                                <div class="loading-spinner">
+                                    <div class="spinner"></div>
+                                    <p>Cargando...</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="sidebar-widget">
+                            <h3 class="widget-title">Próximos Eventos</h3>
+                            <div class="events-list" id="eventsList">
+                                <div class="loading-spinner">
+                                    <div class="spinner"></div>
+                                    <p>Cargando...</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="sidebar-widget">
+                            <h3 class="widget-title">Categorías</h3>
+                            <div class="category-list" id="categoryList">
+                                <div class="loading-spinner">
+                                    <div class="spinner"></div>
+                                    <p>Cargando...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <img src="Logo.png" alt="Logo" class="footer-logo">
+                    <h3>PCB Science Research Club</h3>
+                    <p>Fomentando la investigación científica y el periodismo científico estudiantil.</p>
+                </div>
+                <div class="footer-social">
+                    <h4>Síguenos</h4>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/share/1DeitrZZiN/?mibextid=wwXIfr" aria-label="Facebook" class="social-link">FB</a>
+                        <a href="https://www.instagram.com/pcb_scienceclub?stkn=MXYwMWFyc2JobXk4aQ==" aria-label="Instagram" class="social-link">IG</a>
+                        <a href="#" aria-label="YouTube" class="social-link">YT</a>
+                        <a href="#" aria-label="TikTok" class="social-link">TK</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 PCB Science Research Club. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="supabase.min.js"></script>
+    <script src="config.js"></script>
+    <script src="theme.js"></script>
+    <script src="periodico.js"></script>
+</body>
+</html>

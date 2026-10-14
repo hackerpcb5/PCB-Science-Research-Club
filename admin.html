@@ -7,9 +7,10 @@
     <title>Admin - PCB Science Research Club</title>
     <link rel="icon" type="image/png" href="Logo.png">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="periodico.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
     <script>
         (function () {
             try {
@@ -38,6 +39,10 @@
                                 <li><a href="#" data-type="category">Categoría</a></li>
                                 <li><a href="#" data-type="gallery">Imagen de Galería</a></li>
                                 <li><a href="#" data-type="leadership">Miembro de Directiva</a></li>
+                                <li class="dropdown-divider"></li>
+                                <li><a href="#" data-type="periodico-articulo">Artículo de Periódico</a></li>
+                                <li><a href="#" data-type="periodico-autor">Autor de Periódico</a></li>
+                                <li><a href="#" data-type="periodico-evento">Evento Escolar</a></li>
                             </ul>
                         </li>
                         <li><a href="#" class="nav-link" id="logoutBtn">Cerrar Sesión</a></li>
@@ -61,6 +66,7 @@
                     <button class="admin-nav-item" data-section="categories">Categorías</button>
                     <button class="admin-nav-item" data-section="gallery">Galería</button>
                     <button class="admin-nav-item" data-section="leadership">Directiva</button>
+                    <button class="admin-nav-item" data-section="periodico">Periódico Escolar</button>
                     <button class="admin-nav-item" data-section="settings">Configuración</button>
                 </nav>
                 <div class="admin-back">
@@ -137,6 +143,108 @@
                     </div>
                 </section>
 
+                <section class="admin-section hidden" id="section-periodico">
+                    <div class="periodicidad-admin-header">
+                        <h2 class="section-title">Periódico Escolar</h2>
+                        <p class="section-subtitle">Gestión de noticias, categorías y autores</p>
+                    </div>
+
+                    <ul class="periodicidad-subnav">
+                        <li><button class="periodicidad-subnav-item active" data-psection="periodico-articulos">Artículos</button></li>
+                        <li><button class="periodicidad-subnav-item" data-psection="periodico-categorias">Categorías</button></li>
+                        <li><button class="periodicidad-subnav-item" data-psection="periodico-autores">Autores</button></li>
+                        <li><button class="periodicidad-subnav-item" data-psection="periodico-eventos">Eventos</button></li>
+                    </ul>
+
+                    <section class="periodicidad-subsection" id="periodico-sub-articulos">
+                        <div class="subsection-toolbar">
+                            <button class="btn btn-primary" id="addPeriodicoArticuloBtn">+ Nuevo Artículo</button>
+                            <input type="text" id="periodicoSearchInput" class="search-input" placeholder="Buscar artículos...">
+                        </div>
+                        <div class="table-container">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Título</th>
+                                        <th>Autor</th>
+                                        <th>Categoría</th>
+                                        <th>Estado</th>
+                                        <th>Destacado</th>
+                                        <th>Fecha Publicación</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="periodicoArticulosTableBody">
+                                    <tr><td colspan="7" class="loading-text">Cargando artículos...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <section class="periodicidad-subsection hidden" id="periodico-sub-categorias">
+                        <div class="subsection-toolbar">
+                            <button class="btn btn-primary" id="addPeriodicoCategoriaBtn">+ Nueva Categoría</button>
+                        </div>
+                        <div class="table-container">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Color</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="periodicoCategoriasTableBody">
+                                    <tr><td colspan="3" class="loading-text">Cargando categorías...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <section class="periodicidad-subsection hidden" id="periodico-sub-autores">
+                        <div class="subsection-toolbar">
+                            <button class="btn btn-primary" id="addPeriodicoAutorBtn">+ Nuevo Autor</button>
+                        </div>
+                        <div class="table-container">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Foto</th>
+                                        <th>Nombre</th>
+                                        <th>Descripción</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="periodicoAutoresTableBody">
+                                    <tr><td colspan="4" class="loading-text">Cargando autores...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <section class="periodicidad-subsection hidden" id="periodico-sub-eventos">
+                        <div class="subsection-toolbar">
+                            <button class="btn btn-primary" id="addPeriodicoEventoBtn">+ Nuevo Evento</button>
+                            <input type="text" id="periodicoEventoSearchInput" class="search-input" placeholder="Buscar eventos...">
+                        </div>
+                        <div class="table-container">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Título</th>
+                                        <th>Fecha Evento</th>
+                                        <th>Publicado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="periodicoEventosTableBody">
+                                    <tr><td colspan="4" class="loading-text">Cargando eventos...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                </section>
+
                 <section class="admin-section hidden" id="section-settings">
                     <h2 class="section-title">Configuración del Club</h2>
                     <form id="settingsForm" class="admin-form">
@@ -167,5 +275,6 @@
     <script src="config.js"></script>
     <script src="theme.js"></script>
     <script src="admin.js"></script>
+    <script src="periodico-admin.js"></script>
 </body>
 </html>
