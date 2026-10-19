@@ -31,7 +31,7 @@
         try {
             const { data, error } = await window.supabaseClient
                 .from('periodico_articulos')
-                .select('*, periodico_categorias(*), periodico_autores(*)')
+                .select('*, periodico_categorias(*), periodico_autores(*), periodico_galeria(*)')
                 .eq('slug', slug)
                 .eq('publicado', true)
                 .single();

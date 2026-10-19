@@ -1,33 +1,41 @@
 (function () {
     'use strict';
 
+    let currentUser = null;
     let periodicoArticulos = [];
     let periodicoCategorias = [];
     let periodicoAutores = [];
     let periodicoEventos = [];
     let currentPSection = 'periodico-articulos';
     const UPLOAD_BUCKET = 'uploads';
+    const UPLOAD_FOLDER = '';
 
     document.addEventListener('DOMContentLoaded', init);
 
     async function init() {
-        await checkAuth();
+        const authenticated = await checkAuth();
+        if (!authenticated) return;
         await loadAllPeriodicoData();
         setupEventListeners();
     }
 
     async function checkAuth() {
         if (!window.supabaseClient || !window.supabaseClient.auth) {
-            return;
+            window.location.href = 'login.html';
+            return false;
         }
         try {
             const { data: { session } } = await window.supabaseClient.auth.getSession();
-            if (!session) {
-                return;
+            if (session) {
+                currentUser = session.user;
+                return true;
             }
         } catch (error) {
             console.error('Error verificando sesión:', error);
         }
+
+        window.location.href = 'login.html';
+        return false;
     }
 
     async function loadAllPeriodicoData() {
@@ -107,7 +115,7 @@
         try {
             const { data, error } = await window.supabaseClient
                 .from('periodico_articulos')
-                .select('*, periodico_categorias(*), periodico_autores(*)')
+                .select('*, periodico_categorias(*), periodico_autores(*), periodico_galeria(*)')
                 .order('created_at', { ascending: false });
 
             if (error) throw error;
@@ -133,6 +141,7 @@
             const autor = article.periodico_autores || {};
             const estado = article.publicado ? 'Publicado' : 'Borrador';
             const estadoClass = article.publicado ? 'status-published' : 'status-draft';
+            const galeriaCount = (article.periodico_galeria || []).length;
 
             return `
             <tr>
@@ -144,6 +153,7 @@
                 <td>${formatDate(article.fecha_publicacion)}</td>
                 <td>
                     <button class="btn btn-sm btn-primary edit-btn" data-id="${article.id}">Editar</button>
+                    <button class="btn btn-sm btn-info galeria-btn" data-id="${article.id}" title="Galería (${galeriaCount})">Galería</button>
                     <button class="btn btn-sm btn-danger delete-btn" data-id="${article.id}">Eliminar</button>
                 </td>
             </tr>
@@ -172,6 +182,8 @@
         if (btn.classList.contains('edit-btn')) {
             const article = periodicoArticulos.find(a => a.id === id);
             if (article) openPeriodicoArticuloModal(article);
+        } else if (btn.classList.contains('galeria-btn')) {
+            openPeriodicoGaleriaModal(id);
         } else if (btn.classList.contains('delete-btn')) {
             if (confirm('¿Estás seguro de eliminar este artículo?')) {
                 deletePeriodicoArticulo(id);
@@ -263,7 +275,7 @@
         document.body.appendChild(modal);
         addModalCloseHandler('closePeriodicoArticuloModal', modal);
         addFormSubmitHandler('periodicoArticuloForm', savePeriodicoArticulo);
-        createFileInputHandler('periodicoArticuloImagen', 'uploadPeriodicoArticuloImagen', 'periodico');
+        createFileInputHandler('periodicoArticuloImagen', 'uploadPeriodicoArticuloImagen', '');
     }
 
     async function getPeriodicoCategoriaOptions(selectedId = null) {
@@ -349,6 +361,185 @@
                 .delete()
                 .eq('id', id);
             if (error) throw error;
+            await loadPeriodicoArticulos();
+        } catch (error) {
+            alert('Error al eliminar: ' + error.message);
+        }
+    }
+
+    async function loadPeriodicoGaleria(articuloId) {
+        try {
+            const { data, error } = await window.supabaseClient
+                .from('periodico_galeria')
+                .select('*')
+                .eq('articulo_id', articuloId)
+                .order('orden', { ascending: true });
+
+            if (error) throw error;
+            return data || [];
+        } catch (error) {
+            console.error('Error loading galeria:', error);
+            return [];
+        }
+    }
+
+    function openPeriodicoGaleriaModal(articuloId) {
+        const article = periodicoArticulos.find(a => a.id === articuloId);
+        const articleTitle = article ? article.titulo : '';
+
+        const modal = document.createElement('div');
+        modal.className = 'modal active';
+        modal.id = 'periodicoGaleriaModal';
+        modal.innerHTML = `
+            <div class="modal-content modal-wide modal-form-content">
+                <button class="modal-close" id="closePeriodicoGaleriaModal">&times;</button>
+                <div class="modal-header">
+                    <h2>Galería: ${articleTitle}</h2>
+                </div>
+                <div class="modal-body">
+                    <div style="margin-bottom: 15px;">
+                        <button class="btn btn-primary" id="addPeriodicoGaleriaBtn">+ Agregar Imagen</button>
+                    </div>
+                    <div id="periodicoGaleriaList" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px;">
+                        <p class="loading-text">Cargando galería...</p>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary modal-cancel" data-target="periodicoGaleriaModal">Cerrar</button>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+        addModalCloseHandler('closePeriodicoGaleriaModal', modal);
+        document.getElementById('addPeriodicoGaleriaBtn')?.addEventListener('click', () => openPeriodicoGaleriaItemModal(articuloId));
+        renderPeriodicoGaleria(articuloId);
+    }
+
+    async function renderPeriodicoGaleria(articuloId) {
+        const container = document.getElementById('periodicoGaleriaList');
+        if (!container) return;
+
+        const galeria = await loadPeriodicoGaleria(articuloId);
+        if (!galeria.length) {
+            container.innerHTML = '<p class="loading-text">No hay imágenes en la galería.</p>';
+            return;
+        }
+
+        container.innerHTML = galeria.map(img => `
+            <div class="galeria-item" data-id="${img.id}">
+                <img src="${img.url}" alt="${img.titulo || 'Imagen'}" style="width:100%;height:150px;object-fit:cover;border-radius:8px;">
+                <div style="padding:8px;">
+                    <strong>${img.titulo || 'Sin título'}</strong>
+                    <div style="font-size:12px;color:#666;margin-top:4px;">Orden: ${img.orden}</div>
+                </div>
+                <div style="position:absolute;top:5px;right:5px;display:flex;gap:5px;">
+                    <button class="btn btn-sm btn-primary edit-btn" data-id="${img.id}" title="Editar">✏</button>
+                    <button class="btn btn-sm btn-danger delete-btn" data-id="${img.id}" title="Eliminar">×</button>
+                </div>
+            </div>
+        `).join('');
+
+        container.addEventListener('click', (e) => {
+            const btn = e.target.closest('button');
+            if (!btn) return;
+            const imgId = btn.dataset.id;
+            if (btn.classList.contains('edit-btn')) {
+                const img = galeria.find(g => g.id === imgId);
+                if (img) openPeriodicoGaleriaItemModal(articuloId, img);
+            } else if (btn.classList.contains('delete-btn')) {
+                if (confirm('¿Eliminar esta imagen?')) {
+                    deletePeriodicoGaleriaItem(imgId, articuloId);
+                }
+            }
+        });
+    }
+
+    function openPeriodicoGaleriaItemModal(articuloId, item = null) {
+        const isEdit = !!item;
+        const modal = document.createElement('div');
+        modal.className = 'modal active';
+        modal.id = 'periodicoGaleriaItemModal';
+        modal.innerHTML = `
+            <div class="modal-content modal-narrow modal-form-content">
+                <button class="modal-close" id="closePeriodicoGaleriaItemModal">&times;</button>
+                <div class="modal-header">
+                    <h2>${isEdit ? 'Editar' : 'Agregar'} Imagen</h2>
+                </div>
+                <form id="periodicoGaleriaItemForm" class="modal-form" novalidate>
+                    <input type="hidden" id="periodicoGaleriaItemId" value="${isEdit ? item.id : ''}">
+                    <input type="hidden" id="periodicoGaleriaArticuloId" value="${articuloId}">
+                    <div class="form-group">
+                        <label for="periodicoGaleriaTitulo">Título <span class="optional">(opcional)</span></label>
+                        <input type="text" id="periodicoGaleriaTitulo" value="${isEdit ? item.titulo || '' : ''}">
+                    </div>
+                    <div class="form-group">
+                        <label for="periodicoGaleriaUrl">URL de Imagen <span class="required">*</span></label>
+                        <div class="url-with-upload">
+                            <input type="url" id="periodicoGaleriaUrl" required value="${isEdit ? item.url : ''}" placeholder="https://...">
+                            <button type="button" class="btn btn-sm btn-secondary" id="uploadPeriodicoGaleriaUrl">Importar archivo</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="periodicoGaleriaOrden">Orden</label>
+                        <input type="number" id="periodicoGaleriaOrden" value="${isEdit ? item.orden : 0}">
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">${isEdit ? 'Actualizar' : 'Agregar'} Imagen</button>
+                        <button type="button" class="btn btn-secondary modal-cancel" data-target="periodicoGaleriaItemModal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+        addModalCloseHandler('closePeriodicoGaleriaItemModal', modal);
+        addFormSubmitHandler('periodicoGaleriaItemForm', savePeriodicoGaleriaItem);
+        createFileInputHandler('periodicoGaleriaUrl', 'uploadPeriodicoGaleriaUrl', '');
+    }
+
+    async function savePeriodicoGaleriaItem() {
+        const id = document.getElementById('periodicoGaleriaItemId').value;
+        const articuloId = document.getElementById('periodicoGaleriaArticuloId').value;
+        const itemData = {
+            articulo_id: articuloId,
+            url: document.getElementById('periodicoGaleriaUrl').value,
+            titulo: document.getElementById('periodicoGaleriaTitulo').value || null,
+            orden: parseInt(document.getElementById('periodicoGaleriaOrden').value) || 0
+        };
+
+        try {
+            let error;
+            if (id) {
+                const { error: err } = await window.supabaseClient
+                    .from('periodico_galeria')
+                    .update(itemData)
+                    .eq('id', id);
+                error = err;
+            } else {
+                const { error: err } = await window.supabaseClient
+                    .from('periodico_galeria')
+                    .insert([itemData]);
+                error = err;
+            }
+
+            if (error) throw error;
+
+            document.getElementById('periodicoGaleriaItemModal')?.remove();
+            renderPeriodicoGaleria(articuloId);
+        } catch (error) {
+            alert('Error: ' + error.message);
+        }
+    }
+
+    async function deletePeriodicoGaleriaItem(imgId, articuloId) {
+        try {
+            const { error } = await window.supabaseClient
+                .from('periodico_galeria')
+                .delete()
+                .eq('id', imgId);
+            if (error) throw error;
+            await renderPeriodicoGaleria(articuloId);
             await loadPeriodicoArticulos();
         } catch (error) {
             alert('Error al eliminar: ' + error.message);
@@ -591,7 +782,7 @@
         document.body.appendChild(modal);
         addModalCloseHandler('closePeriodicoAutorModal', modal);
         addFormSubmitHandler('periodicoAutorForm', savePeriodicoAutor);
-        createFileInputHandler('periodicoAutorFoto', 'uploadPeriodicoAutorFoto', 'periodico-autores');
+        createFileInputHandler('periodicoAutorFoto', 'uploadPeriodicoAutorFoto', '');
     }
 
     async function savePeriodicoAutor() {
@@ -746,7 +937,7 @@
         document.body.appendChild(modal);
         addModalCloseHandler('closePeriodicoEventoModal', modal);
         addFormSubmitHandler('periodicoEventoForm', savePeriodicoEvento);
-        createFileInputHandler('periodicoEventoImagen', 'uploadPeriodicoEventoImagen', 'periodico-eventos');
+        createFileInputHandler('periodicoEventoImagen', 'uploadPeriodicoEventoImagen', '');
     }
 
     async function savePeriodicoEvento() {
@@ -889,7 +1080,7 @@
         });
     }
 
-    function createFileInputHandler(urlFieldId, uploadBtnId, bucket = UPLOAD_BUCKET) {
+    function createFileInputHandler(urlFieldId, uploadBtnId, folder) {
         const urlField = document.getElementById(urlFieldId);
         const uploadBtn = document.getElementById(uploadBtnId);
         if (!uploadBtn || !urlField) return;
@@ -908,9 +1099,28 @@
                 if (!file) return;
 
                 uploadBtn.disabled = true;
+                uploadBtn.textContent = 'Verificando...';
+
+                try {
+                    const { data: { session: refreshedSession }, error: refreshError } =
+                        await window.supabaseClient.auth.refreshSession();
+
+                    if (refreshError || !refreshedSession) {
+                        alert('Tu sesión expiró. Por favor inicia sesión nuevamente.');
+                        window.location.href = 'login.html';
+                        return;
+                    }
+                } catch (refreshErr) {
+                    console.error('Error al refrescar sesión:', refreshErr);
+                    alert('Error de autenticación. Por favor inicia sesión nuevamente.');
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                uploadBtn.disabled = true;
                 uploadBtn.textContent = 'Subiendo...';
 
-                const url = await uploadFile(file, bucket);
+                const url = await uploadFile(file, UPLOAD_BUCKET, folder);
                 if (url) {
                     urlField.value = url;
                 }

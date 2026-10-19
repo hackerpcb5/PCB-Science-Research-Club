@@ -509,6 +509,16 @@ html[data-theme="dark"] .theme-icon-moon {
     background: #c82333;
 }
 
+.btn-info {
+    background: #17a2b8;
+    color: var(--white);
+}
+
+.btn-info:hover {
+    background: #138496;
+    transform: translateY(-2px);
+}
+
 .btn-sm {
     padding: 6px 14px;
     font-size: 0.85rem;

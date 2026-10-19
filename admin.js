@@ -302,7 +302,7 @@
         });
     }
 
-    function createFileInputHandler(urlFieldId, uploadBtnId, bucket = UPLOAD_BUCKET) {
+    function createFileInputHandler(urlFieldId, uploadBtnId, folder = '') {
         const urlField = document.getElementById(urlFieldId);
         const uploadBtn = document.getElementById(uploadBtnId);
         if (!uploadBtn || !urlField) return;
@@ -321,9 +321,28 @@
                 if (!file) return;
 
                 uploadBtn.disabled = true;
+                uploadBtn.textContent = 'Verificando...';
+
+                try {
+                    const { data: { session: refreshedSession }, error: refreshError } =
+                        await window.supabaseClient.auth.refreshSession();
+
+                    if (refreshError || !refreshedSession) {
+                        alert('Tu sesión expiró. Por favor inicia sesión nuevamente.');
+                        window.location.href = 'login.html';
+                        return;
+                    }
+                } catch (refreshErr) {
+                    console.error('Error al refrescar sesión:', refreshErr);
+                    alert('Error de autenticación. Por favor inicia sesión nuevamente.');
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                uploadBtn.disabled = true;
                 uploadBtn.textContent = 'Subiendo...';
 
-                const url = await uploadFile(file, bucket);
+                const url = await uploadFile(file, UPLOAD_BUCKET, folder);
                 if (url) {
                     urlField.value = url;
                 }
@@ -413,8 +432,8 @@
         document.body.appendChild(modal);
         addModalClose('closeArticleModal', modal);
         addFormSubmit('articleForm', saveArticle);
-        createFileInputHandler('articleCover', 'uploadArticleCover', 'article-covers');
-        createFileInputHandler('articlePdf', 'uploadArticlePdf', 'articles-pdfs');
+        createFileInputHandler('articleCover', 'uploadArticleCover', '');
+        createFileInputHandler('articlePdf', 'uploadArticlePdf', '');
     }
 
     async function getCategoriesOptions() {
@@ -673,7 +692,7 @@
         document.body.appendChild(modal);
         addModalClose('closeGalleryModal', modal);
         addFormSubmit('galleryForm', saveGalleryImage);
-        createFileInputHandler('galleryImageUrl', 'uploadGalleryImage', 'gallery');
+        createFileInputHandler('galleryImageUrl', 'uploadGalleryImage', '');
     }
 
     async function saveGalleryImage() {
@@ -816,7 +835,7 @@
         document.body.appendChild(modal);
         addModalClose('closeLeadershipModal', modal);
         addFormSubmit('leadershipForm', saveLeadershipMember);
-        createFileInputHandler('memberPhoto', 'uploadMemberPhoto', 'gallery');
+        createFileInputHandler('memberPhoto', 'uploadMemberPhoto', '');
     }
 
     async function saveLeadershipMember() {
