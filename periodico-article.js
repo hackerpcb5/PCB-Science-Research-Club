@@ -74,9 +74,6 @@
         if (!articleElement) return;
 
         articleElement.innerHTML = `
-            <div class="article-header-bar">
-                <a href="periodico.html" class="back-link">← Volver al Periódico</a>
-            </div>
             <div class="article-hero">
                 <span class="article-category-badge" style="background-color: ${categorias.color || '#f0b429'}">${categorias.nombre || 'General'}</span>
                 <h1 class="article-title">${article.titulo}</h1>

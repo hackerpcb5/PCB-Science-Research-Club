@@ -129,6 +129,7 @@ button {
 
 .nav-list {
     display: flex;
+    align-items: center;
     list-style: none;
     gap: 8px;
 }
@@ -140,6 +141,7 @@ button {
     font-size: 0.95rem;
     transition: var(--transition);
     color: var(--text);
+    align-self: stretch;
 }
 
 .nav-link:hover,
@@ -1225,6 +1227,31 @@ html[data-theme="dark"] .theme-icon-moon {
 
 .admin-header .logo-text {
     color: var(--white);
+}
+
+.admin-header .nav-link,
+.admin-header .nav-dropdown-toggle {
+    color: var(--white);
+}
+
+.admin-header .nav-link:hover,
+.admin-header .nav-link.active,
+.admin-header .nav-dropdown-toggle:hover,
+.admin-header .nav-dropdown-toggle.active {
+    background: var(--white);
+    color: var(--secondary);
+}
+
+.admin-header .theme-toggle {
+    background: var(--white);
+    color: var(--secondary);
+    border-color: var(--border);
+}
+
+.admin-header .theme-toggle:hover {
+    background: var(--white);
+    color: var(--secondary);
+    border-color: var(--primary-light);
 }
 
 .admin-main {
