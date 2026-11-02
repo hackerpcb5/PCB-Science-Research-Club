@@ -13,7 +13,6 @@
         await loadClubInformation();
         await loadGallery();
         await loadLeadership();
-        setupMobileMenu();
         setupSlideshowControls();
     }
 
@@ -161,20 +160,9 @@
                     <p class="bio">${member.biography || ''}</p>
                 </div>
             `).join('');
-        } catch (error) {
+} catch (error) {
             console.error('Error loading leadership:', error);
             document.getElementById('leadershipGrid').innerHTML = '<p class="loading-text">Error al cargar la directiva.</p>';
-        }
-    }
-
-    function setupMobileMenu() {
-        const btn = document.getElementById('mobileMenuBtn');
-        const nav = document.getElementById('mainNav');
-
-        if (btn && nav) {
-            btn.addEventListener('click', () => {
-                nav.classList.toggle('active');
-            });
         }
     }
 })();
