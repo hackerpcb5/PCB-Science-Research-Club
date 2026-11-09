@@ -29,30 +29,37 @@
                     <img src="Logo.png" alt="Logo" class="logo-img">
                     <span class="logo-text">Panel de Administración</span>
                 </div>
-                <nav class="nav">
-                    <ul class="nav-list">
-                        <li><a href="index.html" class="nav-link">Ver Sitio</a></li>
-                        <li class="nav-dropdown">
-                            <button class="nav-link nav-dropdown-toggle" id="nuevoDropdownBtn">Nuevo ▾</button>
-                            <ul class="nav-dropdown-menu">
-                                <li><a href="#" data-type="article">Artículo</a></li>
-                                <li><a href="#" data-type="category">Categoría</a></li>
-                                <li><a href="#" data-type="gallery">Imagen de Galería</a></li>
-                                <li><a href="#" data-type="leadership">Miembro de Directiva</a></li>
-                                <li class="dropdown-divider"></li>
-                                <li><a href="#" data-type="periodico-articulo">Artículo de Periódico</a></li>
-                                <li><a href="#" data-type="periodico-autor">Autor de Periódico</a></li>
-                                <li><a href="#" data-type="periodico-evento">Evento Escolar</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="#" class="nav-link" id="logoutBtn">Cerrar Sesión</a></li>
-                    </ul>
-                </nav>
-                <div class="header-actions">
-                    <button class="theme-toggle" data-theme-toggle type="button" aria-label="Activar modo oscuro" aria-pressed="false" title="Activar modo oscuro">
-                        <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-                        <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
-                    </button>
+                <div class="header-nav-container">
+                    <nav class="nav" id="mainNav">
+                        <ul class="nav-list">
+                            <li><a href="index.html" class="nav-link">Ver Sitio</a></li>
+                            <li class="nav-dropdown">
+                                <button class="nav-link nav-dropdown-toggle" id="nuevoDropdownBtn">Nuevo ▾</button>
+                                <ul class="nav-dropdown-menu">
+                                    <li><a href="#" data-type="article">Artículo</a></li>
+                                    <li><a href="#" data-type="category">Categoría</a></li>
+                                    <li><a href="#" data-type="gallery">Imagen de Galería</a></li>
+                                    <li><a href="#" data-type="leadership">Miembro de Directiva</a></li>
+                                    <li class="dropdown-divider"></li>
+                                    <li><a href="#" data-type="periodico-articulo">Artículo de Periódico</a></li>
+                                    <li><a href="#" data-type="periodico-autor">Autor de Periódico</a></li>
+                                    <li><a href="#" data-type="periodico-evento">Evento Escolar</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#" class="nav-link" id="logoutBtn">Cerrar Sesión</a></li>
+                        </ul>
+                    </nav>
+                    <div class="header-actions">
+                        <button class="theme-toggle" data-theme-toggle type="button" aria-label="Activar modo oscuro" aria-pressed="false" title="Activar modo oscuro">
+                            <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                            <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+                        </button>
+                        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Abrir menú">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

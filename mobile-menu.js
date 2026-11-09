@@ -20,8 +20,21 @@
             document.body.style.overflow = isActive ? 'hidden' : '';
         });
 
+        // Handle dropdown toggles on mobile
+        const dropdownToggles = mainNav.querySelectorAll('.nav-dropdown-toggle');
+        dropdownToggles.forEach(toggle => {
+            toggle.addEventListener('click', (e) => {
+                if (window.innerWidth <= 768) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const dropdown = toggle.closest('.nav-dropdown');
+                    dropdown.classList.toggle('active');
+                }
+            });
+        });
+
         // Close menu when clicking on a nav link
-        const navLinks = mainNav.querySelectorAll('.nav-link');
+        const navLinks = mainNav.querySelectorAll('.nav-link:not(.nav-dropdown-toggle)');
         navLinks.forEach(link => {
             link.addEventListener('click', () => {
                 closeMenu();
@@ -52,6 +65,12 @@
                 if (window.innerWidth > 768 && mainNav.classList.contains('active')) {
                     closeMenu();
                 }
+                // Close dropdowns on resize to desktop
+                if (window.innerWidth > 768) {
+                    document.querySelectorAll('.nav-dropdown.active').forEach(dropdown => {
+                        dropdown.classList.remove('active');
+                    });
+                }
             }, 250);
         });
 
@@ -61,6 +80,11 @@
             mobileMenuBtn.setAttribute('aria-expanded', 'false');
             mobileMenuBtn.setAttribute('aria-label', 'Abrir menú');
             document.body.style.overflow = '';
+            
+            // Also close any open dropdowns
+            document.querySelectorAll('.nav-dropdown.active').forEach(dropdown => {
+                dropdown.classList.remove('active');
+            });
         }
     }
 

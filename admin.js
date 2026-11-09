@@ -44,25 +44,32 @@
         // Logout
         document.getElementById('logoutBtn').addEventListener('click', handleLogout);
 
-        // Nuevo dropdown
+        // Nuevo dropdown - only handle on desktop, mobile is handled by mobile-menu.js
         const nuevoDropdown = document.getElementById('nuevoDropdownBtn');
         if (nuevoDropdown) {
             nuevoDropdown.addEventListener('click', (e) => {
-                e.stopPropagation();
-                nuevoDropdown.parentElement.classList.toggle('active');
+                if (window.innerWidth > 768) {
+                    e.stopPropagation();
+                    nuevoDropdown.parentElement.classList.toggle('active');
+                }
             });
 
             document.querySelectorAll('.nav-dropdown-menu a').forEach(item => {
                 item.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const type = item.dataset.type;
-                    switch (type) {
-                        case 'article': openArticleModal(); break;
-                        case 'category': openCategoryModal(); break;
-                        case 'gallery': openGalleryModal(); break;
-                        case 'leadership': openLeadershipModal(); break;
+                    if (window.innerWidth > 768) {
+                        e.preventDefault();
+                        const type = item.dataset.type;
+                        switch (type) {
+                            case 'article': openArticleModal(); break;
+                            case 'category': openCategoryModal(); break;
+                            case 'gallery': openGalleryModal(); break;
+                            case 'leadership': openLeadershipModal(); break;
+                            case 'periodico-articulo': openPeriodicoArticuloModal(); break;
+                            case 'periodico-autor': openPeriodicoAutorModal(); break;
+                            case 'periodico-evento': openPeriodicoEventoModal(); break;
+                        }
+                        nuevoDropdown.parentElement.classList.remove('active');
                     }
-                    nuevoDropdown.parentElement.classList.remove('active');
                 });
             });
 
